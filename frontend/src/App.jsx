@@ -16,7 +16,7 @@ import Kit from "./pages/Kit";
 
 const App = () => {
   return (
-    <div className="sm:mx-24">
+    <div>
       <Routes>
         {/* Main Layout */}
         <Route element={<MainLayout />}>

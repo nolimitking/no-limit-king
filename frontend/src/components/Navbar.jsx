@@ -1,5 +1,5 @@
 import { useState } from "react";
-import logo from "../assets/Logo_And_Name.JPG";
+import logo from "../assets/Logo_And_Name.png";
 import {
   ShoppingBag,
   User,
@@ -12,11 +12,10 @@ import {
   LogIn,
   UserPlus,
 } from "lucide-react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("home");
 
@@ -37,12 +36,12 @@ const Navbar = () => {
 
   return (
     <nav>
-      <div className="container mx-auto px-4 py-3">
+      <div className="container mx-auto sm:px-8 px-4 py-3">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
             <img
-              className="w-16 rounded-xl cursor-pointer"
+              className="w-24 rounded-xl cursor-pointer"
               src={logo}
               alt="Logo"
               onClick={() => {
@@ -53,7 +52,7 @@ const Navbar = () => {
           </div>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center gap-2 border border-black/10 shadow font-semibold rounded-xl px-2 py-2">
+          <div className="hidden md:flex items-center gap-2 border border-amber-500/40 shadow-2xl font-semibold rounded-xl px-2 py-2">
             {menuItems.map((item) => {
               const Icon = item.icon;
               return (
@@ -62,8 +61,8 @@ const Navbar = () => {
                   onClick={() => handleItemClick(item)}
                   className={`cursor-pointer px-4 py-2 rounded-lg transition-colors duration-200 flex items-center gap-2 ${
                     isActive(item.id)
-                      ? "bg-black text-yellow-400"
-                      : "hover:bg-black hover:text-amber-300"
+                      ? "bg-amber-500 text-black"
+                      : "hover:bg-black hover:text-amber-600 text-amber-500"
                   }`}
                 >
                   <Icon size={18} />
@@ -76,23 +75,23 @@ const Navbar = () => {
           {/* User Actions */}
           <div className="hidden md:flex items-center gap-4">
             <ShoppingBag
-              className="cursor-pointer hover:text-black"
+              className="cursor-pointer text-amber-500 hover:text-amber-600"
               size={20}
             />
             <div className="flex items-center gap-2 cursor-pointer group relative">
-              <User className="hover:text-black" size={20} />
+              <User className="text-amber-500 hover:text-amber-600" size={20} />
               <div className="absolute top-full right-0 pt-2 z-20 hidden group-hover:block">
-                <div className="flex flex-col gap-3 p-4 rounded-lg shadow-md w-48">
+                <div className="flex flex-col bg-amber-500 gap-3 p-4 rounded-lg shadow-md w-48">
                   <div
                     onClick={() => navigate("/login")}
-                    className="hover:text-black cursor-pointer py-1 flex items-center gap-2"
+                    className="hover:text-black text-gray-800 cursor-pointer py-1 flex items-center gap-2"
                   >
                     <LogIn size={16} />
                     <span>Login</span>
                   </div>
                   <div
                     onClick={() => navigate("/register")}
-                    className="hover:text-black cursor-pointer py-1 flex items-center gap-2"
+                    className="hover:text-black text-gray-800 cursor-pointer py-1 flex items-center gap-2"
                   >
                     <UserPlus size={16} />
                     <span>Register</span>
@@ -104,56 +103,112 @@ const Navbar = () => {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center gap-4">
-            <ShoppingBag className="cursor-pointer" size={20} />
+            <ShoppingBag className="cursor-pointer text-amber-500" size={20} />
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2 rounded-lg hover:bg-gray-100"
+              className="p-2 rounded-lg text-amber-500 hover:bg-gray-100"
             >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {isMenuOpen ? (
+                <X size={24} className="text-amber-500" />
+              ) : (
+                <Menu size={24} />
+              )}
             </button>
           </div>
         </div>
+      </div>
 
-        {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="md:hidden mt-4 pb-4 border-t pt-4">
-            <div className="flex flex-col gap-3">
-              {menuItems.map((item) => {
-                const Icon = item.icon;
-                return (
+      {/* Mobile Menu - Full Screen with Backdrop */}
+      <div
+        className={`md:hidden fixed inset-0 z-50 transition-all duration-300 ease-in-out ${
+          isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
+        }`}
+      >
+        {/* Backdrop */}
+        <div
+          className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+          onClick={() => setIsMenuOpen(false)}
+        />
+
+        {/* Menu Content */}
+        <div
+          className={`absolute inset-y-0 right-0 w-full max-w-sm bg-black/80 shadow-2xl transform transition-transform duration-300 ease-in-out ${
+            isMenuOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          <div className="flex flex-col h-full">
+            {/* Menu Header */}
+            <div className="p-6 border-b border-amber-500/20">
+              <div className="flex items-center justify-between">
+                <img className="w-24 rounded-xl" src={logo} alt="Logo" />
+                <button
+                  onClick={() => setIsMenuOpen(false)}
+                  className="p-2 rounded-lg hover:bg-amber-500/20 transition-colors"
+                >
+                  <X size={24} className="text-amber-500" />
+                </button>
+              </div>
+            </div>
+
+            {/* Menu Items */}
+            <div className="flex-1 overflow-y-auto py-6 px-4">
+              <div className="flex flex-col gap-2">
+                {menuItems.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <div
+                      key={item.id}
+                      onClick={() => handleItemClick(item)}
+                      className={`cursor-pointer px-6 py-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] ${
+                        isActive(item.id)
+                          ? "bg-amber-500 text-black shadow-lg"
+                          : "hover:bg-amber-600 text-amber-500"
+                      }`}
+                    >
+                      <Icon size={22} />
+                      <span className="text-lg font-semibold">
+                        {item.label}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* User Actions */}
+              <div className="mt-8 pt-6 border-t border-amber-500/20">
+                <div className="flex flex-col gap-2">
                   <div
-                    key={item.id}
-                    onClick={() => handleItemClick(item)}
-                    className={`cursor-pointer px-4 py-3 text-center font-bold rounded-lg transition-colors duration-200 flex items-center justify-center gap-1 ${
-                      isActive(item.id)
-                        ? "bg-black text-yellow-400"
-                        : "hover:bg-gray-100"
-                    }`}
+                    onClick={() => {
+                      navigate("/login");
+                      setIsMenuOpen(false);
+                    }}
+                    className="cursor-pointer px-6 py-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] hover:bg-amber-600 text-amber-500"
                   >
-                    <Icon size={18} />
-                    <span>{item.label}</span>
+                    <LogIn size={22} />
+                    <span className="text-lg font-semibold">Login</span>
                   </div>
-                );
-              })}
-              <div className="flex font-bold flex-col items-center gap-3 px-4 pt-4 border-t">
-                <div
-                  onClick={() => navigate("/login")}
-                  className="cursor-pointer py-2 hover:text-black flex items-center gap-1"
-                >
-                  <LogIn size={16} />
-                  <span>Login</span>
-                </div>
-                <div
-                  onClick={() => navigate("/register")}
-                  className="cursor-pointer py-2 hover:text-black flex items-center gap-1"
-                >
-                  <UserPlus size={16} />
-                  <span>Register</span>
+                  <div
+                    onClick={() => {
+                      navigate("/register");
+                      setIsMenuOpen(false);
+                    }}
+                    className="cursor-pointer px-6 py-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] hover:bg-amber-600 text-amber-500"
+                  >
+                    <UserPlus size={22} />
+                    <span className="text-lg font-semibold">Register</span>
+                  </div>
                 </div>
               </div>
             </div>
+
+            {/* Footer */}
+            <div className="p-6 border-t border-amber-500/20">
+              <div className="text-center text-amber-500/60 text-sm">
+                <p>© 2024 Your Brand</p>
+              </div>
+            </div>
           </div>
-        )}
+        </div>
       </div>
     </nav>
   );
