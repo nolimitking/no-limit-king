@@ -17,7 +17,7 @@ const HomeHeroSection = () => {
               The Billionaire's Beard
             </h1>
             <h2 className="text-3xl md:text-5xl font-serif text-amber-500">
-              No Limit King
+              Elite Grooming Kit
             </h2>
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
@@ -26,7 +26,7 @@ const HomeHeroSection = () => {
               className="relative"
             >
               <h2 className="text-3xl md:text-5xl font-serif italic text-amber-500">
-                Signature Collection
+                Premium Edition
               </h2>
               <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-32 h-px bg-gradient-to-r from-transparent via-amber-500 to-transparent"></div>
             </motion.div>
@@ -47,8 +47,8 @@ const HomeHeroSection = () => {
                   "0 0 60px rgba(245, 158, 11, 0.2)",
                 ],
               }}
-              transition={{ duration: 4, repeat: Infinity }}
-              className="absolute -inset-8 bg-amber-900/20 blur-2xl rounded-full"
+              transition={{ duration: 2, repeat: Infinity }}
+              className="absolute -inset-8 bg-amber-900/40 blur-2xl rounded-full"
             />
 
             {/* Image container */}
@@ -60,7 +60,7 @@ const HomeHeroSection = () => {
                 transition={{ duration: 0.3 }}
                 className="w-full h-auto rounded-xl shadow-2xl relative z-10"
                 src={Kit}
-                alt="Billionaire Beard Kit - Premium Grooming Collection"
+                alt="The Billionaire's Beard Kit - Premium Grooming Collection"
               />
             </div>
           </motion.div>
@@ -72,17 +72,33 @@ const HomeHeroSection = () => {
             className="space-y-8"
           >
             <p className="text-amber-500 text-base sm:text-lg max-w-2xl mx-auto font-light">
-              An uncompromising grooming system for the man who demands
-              excellence. <br />
+              The ultimate grooming system for the discerning gentleman. <br />
               <span className="text-gray-300">
-                Everything you need for the perfect beard.
+                Crafted for perfection, designed for excellence.
               </span>
             </p>
 
+            {/* Price Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 1 }}
+              className="flex flex-col items-center space-y-2"
+            >
+              <div className="flex items-center space-x-4">
+                <span className="text-xl font-semibold text-red-500 bg-red-500/20 px-2 py-2 rounded-xl">
+                  SALE $39.99
+                </span>
+                <span className="text-xl text-gray-400 line-through">
+                  $79.99
+                </span>
+              </div>
+            </motion.div>
+
             <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-              <button className="relative rounded-xl bg-gradient-to-r from-amber-600 to-amber-500 text-white px-6 py-4 rounded-none uppercase tracking-widest text-sm font-medium overflow-hidden group">
+              <button className="relative rounded-xl bg-gradient-to-r from-amber-600 to-amber-500 text-white px-4 py-4 rounded-none uppercase text-sm font-medium overflow-hidden group">
                 <span className="relative z-10 text-black font-bold">
-                  Add To Cart
+                  Add To Cart - $39.99
                 </span>
                 <motion.div
                   className="absolute inset-0 bg-gradient-to-r from-amber-500 to-amber-400"

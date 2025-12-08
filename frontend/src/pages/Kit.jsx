@@ -51,16 +51,16 @@ const Kit = () => {
   };
 
   return (
-    <div className="bg-amber-500 py-16 px-4 mb-32">
+    <div className="bg-gradient-to-br from-amber-500 via-amber-400 to-amber-600 py-16 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Luxury Header */}
         <div className="text-center sm:mb-8 mb-[-24px]">
           <h1 className="text-4xl md:text-5xl font-semi-bold text-gray-900 mb-4">
-            About The Kit
+            Essential Collection
           </h1>
           <p className="text-gray-800 text-lg max-w-2xl mx-auto font-light">
-            Explore the premium essentials inside the kit — slide through the
-            gallery to discover them.
+            Discover our curated selection of premium essentials — swipe through
+            the collection to explore each item.
           </p>
         </div>
 
