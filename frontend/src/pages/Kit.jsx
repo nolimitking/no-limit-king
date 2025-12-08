@@ -10,22 +10,24 @@ import Bag from "../assets/Bag.png";
 import Billionaire_Beard_conditionner from "../assets/Billionaire_Beard_conditionner.png";
 import Billionaire_Beard_straightener_brush from "../assets/Billionaire_Beard_straightener_brush.png";
 import Billionaire_Beard_Oil from "../assets/Billionaire_Beard_Oil.png";
+import Billionaire_Beard_Wash from "../assets/Billionaire_Beard_Wash.png";
+import Billionaire_Beard_Balm from "../assets/Billionaire_Beard_Balm.png";
 
 // Product data with full descriptions
 const products = [
   {
     id: 1,
-    name: "The Voyager Travel Bag",
+    name: "Gift Bag – No Limit King Billionaire Beard Kit",
     image: Bag,
     fullDescription:
-      "The Voyager Travel Bag represents the pinnacle of luggage craftsmanship. Each piece is meticulously handcrafted in Florence from ethically sourced full-grain Italian leather that develops a rich patina over time. Features include: • Custom brass hardware with anti-tarnish coating • Expandable main compartment • RFID-protected document pocket • Removable shoe compartment • Water-resistant lining • Lifetime guarantee",
+      "A premium, stylish gift bag crafted to match the luxury of the No Limit King Billionaire Beard Kit. Durable, sleek, and designed for unforgettable gifting — the perfect finishing touch for the ultimate beard-care experience.",
   },
   {
     id: 2,
     name: "Billionaire Beard Conditioner",
     image: Billionaire_Beard_conditionner,
     fullDescription:
-      "Our signature conditioner combines rare botanical extracts with cutting-edge science. Formulated with Moroccan argan oil, Japanese silk proteins, and Swiss alpine botanicals, it provides: • Deep hydration without greasiness • Thermal protection up to 450°F • Natural shine enhancement • Frizz control and manageability • Subtle sandalwood and oud fragrance • Suitable for all beard types and lengths",
+      "Made with 100% natural ingredients to cleanse, soften, and deeply moisturize your beard. Enriched with Argan oil, Jojoba oil, aloe, green tea, and Provitamin B5, it leaves a luxurious scent with notes of sandalwood and champaca. After shampooing, massage through your beard, leave for 2–3 minutes, then rinse. For best results, pair with the Billionaire Beard Oil.",
   },
   {
     id: 3,
@@ -40,6 +42,20 @@ const products = [
     image: Billionaire_Beard_Oil,
     fullDescription:
       "Designed to promote rapid growth, repair damage, and provide softening and moisturizing benefits to your beard, leaving you feeling refreshed and emitting a luxurious scent. INGREDIENTS: Our formulation objective is to provide a rich beard oil abundant in natural and organic ingredients. Comprised of Argan, Jojoba, Apricot kernel, Sweet almond, Grapeseed, Vitamin E, Coconut, Avocado, Castor, Sunflower, Eucalyptus, Rosemary essential oils, Champaca, Rose, Lemon citrus, Black pepper, Sandalwood, and Laurel leaf. ",
+  },
+  {
+    id: 5,
+    name: "Billionaire Beard Wash",
+    image: Billionaire_Beard_Wash,
+    fullDescription:
+      "is expertly formulated to thoroughly cleanse, hydrate, soften, and detangle your beard. About this item: Our unique blend of botanical ingredients, including apricot and aloe, works in harmony with a carefully crafted blend of natural oils, featuring organic rosemary, coconut oil, jojoba, argan, and avocado oil. Our Nolimit beard wash set provides a deep cleanse and nourishment. Simply apply a small amount of shampoo, add water, massage into your beard, and the rich lather will take care of the rest.",
+  },
+  {
+    id: 6,
+    name: "Beard balm",
+    image: Billionaire_Beard_Balm,
+    fullDescription:
+      "No Limit Billionaire Beard Balm most used daily Conditioner and softener with champaca essential oil Smelling fresh and luxurious.",
   },
 ];
 

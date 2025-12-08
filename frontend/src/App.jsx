@@ -12,7 +12,6 @@ import OrderSuccess from "./pages/OrderSuccess";
 import AuthLayout from "./layouts/AuthLayout";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
-import Kit from "./pages/Kit";
 
 const App = () => {
   return (
@@ -27,7 +26,6 @@ const App = () => {
           <Route path="/products/:id" element={<ProductsDetails />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/order-success" element={<OrderSuccess />} />
-          <Route path="/kit" element={<Kit />} />
         </Route>
 
         {/* Auth Layout */}

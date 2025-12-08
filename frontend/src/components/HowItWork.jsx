@@ -4,24 +4,24 @@ const HowItWorks = () => {
   const features = [
     {
       icon: <Truck className="w-8 h-8" />,
-      title: "Free Shipping",
+      title: "Fast Delivery",
       description:
-        "Complimentary worldwide delivery on all orders. Your luxury items arrive directly to your doorstep.",
+        "Get your No Limit Billionaire Beard Kit delivered quickly and securely to your doorstep.",
       step: "01",
     },
     {
       icon: <Shield className="w-8 h-8" />,
       title: "Secure Payment",
       description:
-        "Bank-level encryption ensures your transactions are protected with the highest security standards.",
+        "Your purchase is always protected with encrypted and trusted payment methods.",
       step: "02",
     },
     {
       icon: <CheckCircle className="w-8 h-8" />,
-      title: "Premium Quality",
+      title: "Premium Beard Care",
       description:
-        "Every item is meticulously curated and quality-checked to meet our exacting standards.",
-      step: "04",
+        "Experience luxury grooming. Made for Alpha males who demand excellence and flawless results.",
+      step: "03",
     },
   ];
 
@@ -33,7 +33,7 @@ const HowItWorks = () => {
           <div className="inline-flex items-center justify-center gap-2 mb-4">
             <div className="w-16 h-px bg-amber-500"></div>
             <span className="text-amber-500 font-light tracking-widest text-sm uppercase">
-              Experience Comfort
+              The Billionaire's Standard
             </span>
             <div className="w-16 h-px bg-amber-500"></div>
           </div>
@@ -41,8 +41,8 @@ const HowItWorks = () => {
             How It <span className="text-amber-500">Works</span>
           </h2>
           <p className="text-gray-400 max-w-2xl mx-auto font-light text-lg">
-            A seamless journey from selection to delivery, designed with Comfort
-            in mind.
+            From grooming mastery to doorstep delivery. The path to a legendary
+            beard starts here.
           </p>
         </div>
 
@@ -70,7 +70,6 @@ const HowItWorks = () => {
                 </div>
 
                 {/* Content */}
-
                 <p className="text-gray-400 font-light leading-relaxed">
                   {feature.description}
                 </p>
