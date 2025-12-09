@@ -58,7 +58,7 @@ const HowItWorks = () => {
               </div>
 
               {/* Feature Card */}
-              <div className="bg-black/50 backdrop-blur-sm border border-gray-800 rounded-2xl p-8 pt-12 h-full transition-all duration-300 group-hover:border-amber-500/50 group-hover:translate-y-[-4px]">
+              <div className="bg-black/50 backdrop-blur-sm border border-gray-800/40 rounded-2xl p-8 pt-12 h-full transition-all duration-300 group-hover:border-amber-500/20 group-hover:translate-y-[-4px]">
                 {/* Icon Container */}
                 <div className="mb-6 flex gap-4">
                   <div className="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-gradient-to-br from-amber-500/10 to-amber-500/5 border border-amber-500/20 text-amber-500 group-hover:bg-amber-500/20 transition-all duration-300">

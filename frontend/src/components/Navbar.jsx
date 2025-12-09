@@ -6,32 +6,22 @@ import {
   Menu,
   X,
   Home,
-  Package,
   Info,
   Phone,
   LogIn,
   UserPlus,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeItem, setActiveItem] = useState("home");
 
   const menuItems = [
     { id: "home", label: "Home", path: "/", icon: Home },
     { id: "about", label: "About", path: "/about", icon: Info },
     { id: "contact", label: "Contact", path: "/contact", icon: Phone },
   ];
-
-  const handleItemClick = (item) => {
-    setActiveItem(item.id);
-    if (item.path) navigate(item.path);
-    setIsMenuOpen(false);
-  };
-
-  const isActive = (itemId) => activeItem === itemId;
 
   return (
     <nav>
@@ -43,10 +33,7 @@ const Navbar = () => {
               className="w-24 rounded-xl cursor-pointer"
               src={logo}
               alt="Logo"
-              onClick={() => {
-                setActiveItem("home");
-                navigate("/");
-              }}
+              onClick={() => navigate("/")}
             />
           </div>
 
@@ -55,18 +42,20 @@ const Navbar = () => {
             {menuItems.map((item) => {
               const Icon = item.icon;
               return (
-                <div
+                <NavLink
                   key={item.id}
-                  onClick={() => handleItemClick(item)}
-                  className={`cursor-pointer px-4 py-2 rounded-lg transition-colors duration-200 flex items-center gap-2 ${
-                    isActive(item.id)
-                      ? "bg-amber-500 text-black"
-                      : "hover:bg-black hover:text-amber-600 text-amber-500"
-                  }`}
+                  to={item.path}
+                  className={({ isActive }) =>
+                    `cursor-pointer px-4 py-2 rounded-lg transition-colors duration-200 flex items-center gap-2 ${
+                      isActive
+                        ? "bg-amber-500 text-black"
+                        : "hover:bg-black hover:text-amber-600 text-amber-500"
+                    }`
+                  }
                 >
                   <Icon size={18} />
                   <span>{item.label}</span>
-                </div>
+                </NavLink>
               );
             })}
           </div>
@@ -117,7 +106,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu - Full Screen with Backdrop */}
+      {/* Mobile Menu - With Backdrop */}
       <div
         className={`md:hidden fixed inset-0 z-50 transition-all duration-300 ease-in-out ${
           isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
@@ -129,17 +118,17 @@ const Navbar = () => {
           onClick={() => setIsMenuOpen(false)}
         />
 
-        {/* Menu Content */}
+        {/* Sidebar */}
         <div
-          className={`absolute inset-y-0 right-0 w-full max-w-sm bg-black/80 shadow-2xl transform transition-transform duration-300 ease-in-out ${
+          className={`absolute inset-y-0 right-0 w-full max-w-sm bg-black/80 shadow-2xl transform transition-transform duration-300 ${
             isMenuOpen ? "translate-x-0" : "translate-x-full"
           }`}
         >
           <div className="flex flex-col h-full">
-            {/* Menu Header */}
+            {/* Header */}
             <div className="p-6 border-b border-amber-500/20">
               <div className="flex items-center justify-between">
-                <img className="w-24 rounded-xl" src={logo} alt="Logo" />
+                <img className="w-24" src={logo} alt="Logo" />
                 <button
                   onClick={() => setIsMenuOpen(false)}
                   className="p-2 rounded-lg hover:bg-amber-500/20 transition-colors"
@@ -155,20 +144,23 @@ const Navbar = () => {
                 {menuItems.map((item) => {
                   const Icon = item.icon;
                   return (
-                    <div
+                    <NavLink
                       key={item.id}
-                      onClick={() => handleItemClick(item)}
-                      className={`cursor-pointer px-6 py-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] ${
-                        isActive(item.id)
-                          ? "bg-amber-500 text-black shadow-lg"
-                          : "hover:bg-amber-600 text-amber-500"
-                      }`}
+                      to={item.path}
+                      onClick={() => setIsMenuOpen(false)}
+                      className={({ isActive }) =>
+                        `cursor-pointer px-6 py-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] ${
+                          isActive
+                            ? "bg-amber-500 text-black shadow-lg"
+                            : "hover:bg-amber-600 text-amber-500"
+                        }`
+                      }
                     >
                       <Icon size={22} />
                       <span className="text-lg font-semibold">
                         {item.label}
                       </span>
-                    </div>
+                    </NavLink>
                   );
                 })}
               </div>
@@ -181,7 +173,7 @@ const Navbar = () => {
                       navigate("/login");
                       setIsMenuOpen(false);
                     }}
-                    className="cursor-pointer px-6 py-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] hover:bg-amber-600 text-amber-500"
+                    className="cursor-pointer px-6 py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-amber-600 text-amber-500"
                   >
                     <LogIn size={22} />
                     <span className="text-lg font-semibold">Login</span>
@@ -191,7 +183,7 @@ const Navbar = () => {
                       navigate("/register");
                       setIsMenuOpen(false);
                     }}
-                    className="cursor-pointer px-6 py-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] hover:bg-amber-600 text-amber-500"
+                    className="cursor-pointer px-6 py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-amber-600 text-amber-500"
                   >
                     <UserPlus size={22} />
                     <span className="text-lg font-semibold">Register</span>

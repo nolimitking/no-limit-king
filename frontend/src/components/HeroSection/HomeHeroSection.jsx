@@ -3,7 +3,7 @@ import Kit from "../../assets/Kit.png";
 
 const HomeHeroSection = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center px-4 py-20 overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center sm:mt-32 px-4 py-20 overflow-hidden">
       <div className="relative z-10 w-full max-w-6xl mx-auto">
         <div className="flex flex-col items-center text-center space-y-12">
           {/* Luxury Headline */}
@@ -71,7 +71,7 @@ const HomeHeroSection = () => {
             transition={{ duration: 0.8, delay: 0.8 }}
             className="space-y-8"
           >
-            <p className="text-amber-500 text-base sm:text-lg max-w-2xl mx-auto font-light">
+            <p className="text-gray-500 text-base sm:text-lg max-w-2xl mx-auto font-light">
               The ultimate grooming system for the discerning gentleman. <br />
               <span className="text-gray-300">
                 Crafted for perfection, designed for excellence.
@@ -86,22 +86,22 @@ const HomeHeroSection = () => {
               className="flex flex-col items-center space-y-2"
             >
               <div className="flex items-center space-x-4">
-                <span className="text-xl font-semibold text-red-500 bg-red-500/20 px-2 py-2 rounded-xl">
-                  SALE $39.99
+                <span className="text-xl text-amber-500 bg-amber-500/20 px-2 py-2 rounded-xl">
+                  Sale $39.99
                 </span>
-                <span className="text-xl text-gray-400 line-through">
+                <span className="text-xl font-light text-gray-400 line-through">
                   $79.99
                 </span>
               </div>
             </motion.div>
 
             <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-              <button className="relative rounded-xl bg-gradient-to-r from-amber-600 to-amber-500 text-white px-4 py-4 rounded-none uppercase text-sm font-medium overflow-hidden group">
-                <span className="relative z-10 text-black font-bold">
+              <button className="relative rounded-xl bg-gradient-to-r from-amber-600 to-amber-500 text-white px-4 py-4 rounded-xl text-sm font-medium overflow-hidden">
+                <span className="relative z-10 text-black/80">
                   Add To Cart - $39.99
                 </span>
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-amber-500 to-amber-400"
+                  className="bg-gradient-to-r from-amber-500 to-amber-400"
                   initial={{ x: "-100%" }}
                   whileHover={{ x: 0 }}
                   transition={{ duration: 0.3 }}
