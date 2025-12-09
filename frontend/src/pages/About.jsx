@@ -135,7 +135,7 @@ const About = () => {
               transition={{ duration: 0.6, delay: index * 0.1 }}
               className="group"
             >
-              <div className="relative h-full bg-gradient-to-br from-amber-800/20 to-amber-900/5 rounded-2xl p-6 border border-amber-700/20 hover:border-amber-500/30 transition-all duration-300 hover:shadow-2xl hover:shadow-amber-900/10">
+              <div className="relative h-full bg-black rounded-2xl p-6 border border-amber-500/40 hover:border-amber-500/30 transition-all duration-300 hover:shadow-2xl hover:shadow-amber-900/10">
                 {/* Icon */}
                 <div
                   className={`mb-6 p-4 rounded-xl bg-gradient-to-br ${product.color} w-fit`}
@@ -201,7 +201,7 @@ const About = () => {
             {corePrinciples.map((principle, index) => (
               <div
                 key={principle.title}
-                className="text-center p-6 rounded-2xl bg-gradient-to-b from-amber-800/20 to-transparent border border-amber-700/20"
+                className="text-center p-6 rounded-2xl bg-black border border-amber-500/40"
               >
                 <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-amber-900/20 to-amber-800/10 border border-amber-500/20 mb-6">
                   <principle.icon
@@ -227,7 +227,7 @@ const About = () => {
           transition={{ duration: 0.8, delay: 0.7 }}
           className="text-center"
         >
-          <div className="max-w-2xl mx-auto bg-gradient-to-r from-amber-900/10 to-amber-800/5 rounded-2xl p-8 border border-amber-500/20">
+          <div className="max-w-2xl mx-auto bg-black rounded-2xl p-8 border border-amber-500/40">
             <h3 className="text-2xl font-light text-white mb-4">
               Experience the Elite Grooming Kit
             </h3>

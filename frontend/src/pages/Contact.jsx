@@ -1,16 +1,5 @@
 import { motion } from "framer-motion";
-import {
-  Mail,
-  Phone,
-  MapPin,
-  Clock,
-  Send,
-  MessageSquare,
-  Shield,
-  Package,
-  CreditCard,
-  Truck,
-} from "lucide-react";
+import { Mail, Phone, MapPin, Clock, Send } from "lucide-react";
 
 const ContactPage = () => {
   const contactInfo = [
@@ -90,7 +79,7 @@ const ContactPage = () => {
               {contactInfo.map((info, index) => (
                 <div
                   key={info.title}
-                  className="bg-gradient-to-r from-amber-900/10 to-amber-800/20 rounded-xl p-6 border border-amber-900/30 hover:border-amber-700/20 transition-all duration-300"
+                  className="bg-black rounded-xl p-6 border border-amber-500/40 hover:border-amber-500 transition-all duration-300"
                 >
                   <div
                     className={`inline-flex items-center justify-center w-12 h-12 rounded-lg bg-gradient-to-br ${info.color} mb-4`}
@@ -127,7 +116,7 @@ const ContactPage = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <div className="bg-gradient-to-r from-amber-900/10 to-amber-800/20 border border-amber-900/30 rounded-2xl p-8">
+            <div className="bg-black border border-amber-500/40 rounded-2xl p-8">
               <div className="flex items-center gap-3 mb-8">
                 <Send className="w-6 h-6 text-amber-400" strokeWidth={1.5} />
                 <h2 className="text-2xl font-light text-white">
@@ -146,7 +135,7 @@ const ContactPage = () => {
                       name="name"
                       required
                       className="w-full px-4 py-3 bg-gray-800/30 border border-gray-700/50 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/30 transition-all"
-                      placeholder="John Carter"
+                      placeholder="Your Name Here"
                     />
                   </div>
 
@@ -159,7 +148,7 @@ const ContactPage = () => {
                       name="email"
                       required
                       className="w-full px-4 py-3 bg-gray-800/30 border border-gray-700/50 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/30 transition-all"
-                      placeholder="john@example.com"
+                      placeholder="Your Email Here"
                     />
                   </div>
                 </div>

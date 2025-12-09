@@ -69,17 +69,17 @@ const Navbar = () => {
             <div className="flex items-center gap-2 cursor-pointer group relative">
               <User className="text-amber-500 hover:text-amber-600" size={20} />
               <div className="absolute top-full right-0 pt-2 z-20 hidden group-hover:block">
-                <div className="flex flex-col bg-amber-500 gap-3 p-4 rounded-lg shadow-md w-48">
+                <div className="flex flex-col bg-amber-500/80 gap-3 p-4 rounded-lg shadow-md w-48">
                   <div
                     onClick={() => navigate("/login")}
-                    className="hover:text-black text-gray-800 cursor-pointer py-1 flex items-center gap-2"
+                    className="hover:text-amber-500 text-black cursor-pointer py-2 px-2 rounded-lg hover:bg-black flex items-center gap-2"
                   >
                     <LogIn size={16} />
                     <span>Login</span>
                   </div>
                   <div
                     onClick={() => navigate("/register")}
-                    className="hover:text-black text-gray-800 cursor-pointer py-1 flex items-center gap-2"
+                    className="hover:text-amber-500 hover:bg-black py-2 px-2 rounded-lg text-black cursor-pointer flex items-center gap-2"
                   >
                     <UserPlus size={16} />
                     <span>Register</span>
