@@ -12,7 +12,7 @@ const CTAHome = () => {
       className="relative"
     >
       <div className="relative bg-gradient-to-b from-gray-950 to-black overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-amber-500/30 to-transparent"></div>
+        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent to-transparent"></div>
 
         {/* Responsive grid layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[400px] md:min-h-[500px]">

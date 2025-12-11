@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import Kit from "../../assets/Kit.png";
+import Kit from "../../assets/Kit.GIF";
 
 const HomeHeroSection = () => {
   return (

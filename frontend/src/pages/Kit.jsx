@@ -61,20 +61,43 @@ const products = [
 
 const Kit = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [activeSlideIndex, setActiveSlideIndex] = useState(0);
 
   const handleCloseOverlay = () => {
     setSelectedProduct(null);
   };
 
+  const handleSlideChange = (swiper) => {
+    setActiveSlideIndex(swiper.realIndex);
+  };
+
+  // Get the background image based on active slide
+  const getBackgroundImage = () => {
+    const product = products[activeSlideIndex % products.length];
+    return product?.image || Bag; // Fallback to first image
+  };
+
   return (
-    <div className="bg-gradient-to-br from-amber-500 via-amber-400 to-amber-600 py-16 px-4">
-      <div className="max-w-7xl mx-auto">
+    <div
+      className="relative py-16 px-4 min-h-screen transition-all duration-500 ease-in-out"
+      style={{
+        backgroundImage: `url(${getBackgroundImage()})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      {/* Dark overlay for better readability */}
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"></div>
+
+      <div className="relative max-w-7xl mx-auto z-10">
         {/* Luxury Header */}
         <div className="text-center sm:mb-8 mb-[-24px]">
-          <h1 className="text-4xl md:text-5xl font-semi-bold text-gray-900 mb-4">
+          <h1 className="text-4xl md:text-5xl font-semi-bold text-white mb-4">
             Essential Collection
           </h1>
-          <p className="text-gray-800 text-lg max-w-2xl mx-auto font-light">
+          <p className="text-white/90 text-lg max-w-2xl mx-auto font-light">
             Discover our curated selection of premium essentials — swipe through
             the collection to explore each item.
           </p>
@@ -89,6 +112,7 @@ const Kit = () => {
             slidesPerView="auto"
             loop={true}
             speed={800}
+            onSlideChange={handleSlideChange}
             coverflowEffect={{
               rotate: 0,
               stretch: -60,
@@ -115,29 +139,26 @@ const Kit = () => {
                   className="relative cursor-pointer"
                   onClick={() => setSelectedProduct(product)}
                 >
-                  {/* Card Container */}
-                  <div className="overflow-hidden">
-                    {/* Image Container */}
-                    <div className="h-120 sm:h-150">
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className="w-full h-full object-contain p-6 transform transition-transform duration-300 hover:scale-105"
-                      />
-                      {/* Click hint overlay */}
-                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 inset-0 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
-                        <span className="text-white text-sm font-light tracking-wider bg-black/30 backdrop-blur-sm px-4 py-2 rounded-full">
-                          View Details
-                        </span>
-                      </div>
+                  {/* Image Container */}
+                  <div className="h-120 sm:h-150">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-full h-full object-contain p-6 transform transition-transform duration-300 hover:scale-105"
+                    />
+                    {/* Click hint overlay */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 inset-0 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
+                      <span className="text-white text-sm font-light tracking-wider bg-black/50 backdrop-blur-sm px-4 py-2 rounded-full">
+                        View Details
+                      </span>
                     </div>
+                  </div>
 
-                    {/* Product Info */}
-                    <div className="flex flex-col items-center justify-center">
-                      <h3 className="text-lg font-normal text-gray-900 tracking-tight mb-8">
-                        {product.name}
-                      </h3>
-                    </div>
+                  {/* Product Info */}
+                  <div className="flex flex-col items-center justify-center p-6">
+                    <h3 className="text-lg font-normal text-white text-center tracking-tight">
+                      {product.name}
+                    </h3>
                   </div>
                 </div>
               </SwiperSlide>
@@ -145,8 +166,8 @@ const Kit = () => {
           </Swiper>
 
           {/* Custom Navigation Buttons - Updated with mobile sizing */}
-          <div className="swiper-button-prev top-1/2 -translate-y-1/2 transition-all duration-200 hover:scale-110 [--swiper-navigation-sides-offset:18rem] [--swiper-navigation-color:theme(colors.gray.900)] scale-75 md:scale-100"></div>
-          <div className="swiper-button-next top-1/2 -translate-y-1/2 transition-all duration-200 hover:scale-110 [--swiper-navigation-sides-offset:18rem] [--swiper-navigation-color:theme(colors.gray.900)] scale-75 md:scale-100"></div>
+          <div className="swiper-button-prev top-1/2 -translate-y-1/2 transition-all duration-200 hover:scale-110 [--swiper-navigation-sides-offset:18rem] [--swiper-navigation-color:white] scale-75 md:scale-100"></div>
+          <div className="swiper-button-next top-1/2 -translate-y-1/2 transition-all duration-200 hover:scale-110 [--swiper-navigation-sides-offset:18rem] [--swiper-navigation-color:white] scale-75 md:scale-100"></div>
 
           {/* Custom Pagination */}
           <div className="swiper-pagination bottom-6"></div>
@@ -220,8 +241,12 @@ const Kit = () => {
           }
         }
         
+        .swiper-pagination-bullet {
+          background-color: rgba(255, 255, 255, 0.5) !important;
+        }
+        
         .swiper-pagination-bullet-active {
-          background-color: #000 !important;
+          background-color: white !important;
           transform: scale(1.2);
         }
         
