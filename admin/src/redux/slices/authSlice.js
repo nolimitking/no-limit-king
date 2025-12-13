@@ -6,31 +6,6 @@ const userInfoFromStorage = JSON.parse(
   localStorage.getItem("userInfo") || "null"
 );
 
-// -------------------- REGISTER USER --------------------
-export const registerUser = createAsyncThunk(
-  "auth/registerUser",
-  async (userData, { rejectWithValue }) => {
-    try {
-      const response = await API.post("/auth/register", userData);
-
-      // Combine user infos + token into one object
-      const userWithToken = {
-        ...response.data.user,
-        token: response.data.token,
-      };
-
-      // Save in localStorage
-      localStorage.setItem("userInfo", JSON.stringify(userWithToken));
-
-      return userWithToken;
-    } catch (error) {
-      return rejectWithValue(
-        error.response?.data?.message || "Something went wrong"
-      );
-    }
-  }
-);
-
 // -------------------- LOGIN USER --------------------
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
@@ -72,21 +47,6 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // REGISTER USER
-      .addCase(registerUser.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(registerUser.fulfilled, (state, action) => {
-        state.loading = false;
-        state.success = true;
-        state.message = action.payload;
-      })
-      .addCase(registerUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-
       // LOGIN USER
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
