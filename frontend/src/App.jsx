@@ -13,9 +13,13 @@ import AuthLayout from "./layouts/AuthLayout";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const App = () => {
   return (
     <div>
+      <ToastContainer />
       <Routes>
         {/* Main Layout */}
         <Route element={<MainLayout />}>

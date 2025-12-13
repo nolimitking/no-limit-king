@@ -1,5 +1,7 @@
 import { useState } from "react";
 import logo from "../assets/Logo_And_Name.png";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../redux/slices/authSlice";
 import {
   ShoppingBag,
   User,
@@ -10,12 +12,28 @@ import {
   Phone,
   LogIn,
   UserPlus,
+  LogOut,
 } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // Clear localStorage and head the user to the home page
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/");
+    setIsMenuOpen(false);
+  };
+
+  // Handle dynamic routes
+  const handleDashboardNavigation = () => {
+    navigate("/user/dashboard");
+    setIsMenuOpen(false);
+  };
 
   const menuItems = [
     { id: "home", label: "Home", path: "/", icon: Home },
@@ -36,7 +54,6 @@ const Navbar = () => {
               onClick={() => navigate("/")}
             />
           </div>
-
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-2 border border-amber-500/40 shadow-2xl font-semibold rounded-xl px-2 py-2">
             {menuItems.map((item) => {
@@ -67,23 +84,47 @@ const Navbar = () => {
               size={20}
             />
             <div className="flex items-center gap-2 cursor-pointer group relative">
-              <User className="text-amber-500 hover:text-amber-600" size={20} />
+              {user ? (
+                <span
+                  onClick={handleDashboardNavigation}
+                  className="font-bold text-black w-5 h-5 p-4 flex justify-center items-center text-xs rounded-full bg-amber-500 hover:bg-amber-600 transition-all cursor-pointer"
+                >
+                  {user.name[0].toUpperCase()}
+                </span>
+              ) : (
+                <User
+                  className="text-amber-500 hover:text-amber-600"
+                  size={20}
+                />
+              )}
               <div className="absolute top-full right-0 pt-2 z-20 hidden group-hover:block">
                 <div className="flex flex-col bg-amber-500/80 gap-3 p-4 rounded-lg shadow-md w-48">
-                  <div
-                    onClick={() => navigate("/login")}
-                    className="hover:text-amber-500 text-black cursor-pointer py-2 px-2 rounded-lg hover:bg-black flex items-center gap-2"
-                  >
-                    <LogIn size={16} />
-                    <span>Login</span>
-                  </div>
-                  <div
-                    onClick={() => navigate("/register")}
-                    className="hover:text-amber-500 hover:bg-black py-2 px-2 rounded-lg text-black cursor-pointer flex items-center gap-2"
-                  >
-                    <UserPlus size={16} />
-                    <span>Register</span>
-                  </div>
+                  {user ? (
+                    <div
+                      onClick={handleLogout}
+                      className="hover:text-amber-500 text-black cursor-pointer py-2 px-2 rounded-lg hover:bg-black flex items-center gap-2"
+                    >
+                      <LogOut size={16} />
+                      <span>Logout</span>
+                    </div>
+                  ) : (
+                    <>
+                      <div
+                        onClick={() => navigate("/login")}
+                        className="hover:text-amber-500 text-black cursor-pointer py-2 px-2 rounded-lg hover:bg-black flex items-center gap-2"
+                      >
+                        <LogIn size={16} />
+                        <span>Login</span>
+                      </div>
+                      <div
+                        onClick={() => navigate("/register")}
+                        className="hover:text-amber-500 hover:bg-black py-2 px-2 rounded-lg text-black cursor-pointer flex items-center gap-2"
+                      >
+                        <UserPlus size={16} />
+                        <span>Register</span>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
@@ -92,6 +133,15 @@ const Navbar = () => {
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center gap-4">
             <ShoppingBag className="cursor-pointer text-amber-500" size={20} />
+            {/* Show user badge in mobile header when logged in */}
+            {user && (
+              <span
+                onClick={handleDashboardNavigation}
+                className="font-bold text-black w-5 h-5 p-4 flex justify-center items-center text-xs rounded-full bg-amber-500 hover:bg-amber-600 transition-all cursor-pointer"
+              >
+                {user.name[0].toUpperCase()}
+              </span>
+            )}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="p-2 rounded-lg text-amber-500 hover:bg-gray-100"
@@ -136,6 +186,18 @@ const Navbar = () => {
                   <X size={24} className="text-amber-500" />
                 </button>
               </div>
+              {/* User info in mobile menu header */}
+              {user && (
+                <div className="mt-4 flex items-center gap-3 p-3 bg-amber-500/20 rounded-lg">
+                  <div className="font-bold text-black w-8 h-8 flex justify-center items-center text-sm rounded-full bg-amber-500">
+                    {user.name[0].toUpperCase()}
+                  </div>
+                  <div>
+                    <p className="text-amber-500 font-semibold">{user.name}</p>
+                    <p className="text-amber-500/70 text-sm">{user.email}</p>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Menu Items */}
@@ -168,26 +230,49 @@ const Navbar = () => {
               {/* User Actions */}
               <div className="mt-8 pt-6 border-t border-amber-500/20">
                 <div className="flex flex-col gap-2">
-                  <div
-                    onClick={() => {
-                      navigate("/login");
-                      setIsMenuOpen(false);
-                    }}
-                    className="cursor-pointer px-6 py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-amber-600 text-amber-500"
-                  >
-                    <LogIn size={22} />
-                    <span className="text-lg font-semibold">Login</span>
-                  </div>
-                  <div
-                    onClick={() => {
-                      navigate("/register");
-                      setIsMenuOpen(false);
-                    }}
-                    className="cursor-pointer px-6 py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-amber-600 text-amber-500"
-                  >
-                    <UserPlus size={22} />
-                    <span className="text-lg font-semibold">Register</span>
-                  </div>
+                  {user ? (
+                    <>
+                      {/* Dashboard Button */}
+                      <div
+                        onClick={handleDashboardNavigation}
+                        className="cursor-pointer px-6 py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-amber-600 text-amber-500"
+                      >
+                        <User size={22} />
+                        <span className="text-lg font-semibold">Dashboard</span>
+                      </div>
+                      {/* Logout Button */}
+                      <div
+                        onClick={handleLogout}
+                        className="cursor-pointer px-6 py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-amber-600 text-amber-500"
+                      >
+                        <LogOut size={22} />
+                        <span className="text-lg font-semibold">Logout</span>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div
+                        onClick={() => {
+                          navigate("/login");
+                          setIsMenuOpen(false);
+                        }}
+                        className="cursor-pointer px-6 py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-amber-600 text-amber-500"
+                      >
+                        <LogIn size={22} />
+                        <span className="text-lg font-semibold">Login</span>
+                      </div>
+                      <div
+                        onClick={() => {
+                          navigate("/register");
+                          setIsMenuOpen(false);
+                        }}
+                        className="cursor-pointer px-6 py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-amber-600 text-amber-500"
+                      >
+                        <UserPlus size={22} />
+                        <span className="text-lg font-semibold">Register</span>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

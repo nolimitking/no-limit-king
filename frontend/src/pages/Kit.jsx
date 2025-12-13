@@ -82,14 +82,14 @@ const Kit = () => {
       className="relative py-16 px-4 min-h-screen transition-all duration-500 ease-in-out"
       style={{
         backgroundImage: `url(${getBackgroundImage()})`,
-        backgroundSize: "cover",
+        backgroundSize: "contain",
         backgroundPosition: "center",
         backgroundAttachment: "fixed",
         backgroundRepeat: "no-repeat",
       }}
     >
       {/* Dark overlay for better readability */}
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"></div>
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-[1px]"></div>
 
       <div className="relative max-w-7xl mx-auto z-10">
         {/* Luxury Header */}

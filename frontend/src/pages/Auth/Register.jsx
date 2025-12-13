@@ -1,33 +1,55 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { registerUser } from "../../redux/slices/authSlice";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [username, setUsername] = useState("");
-
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { loading, error, success, user } = useSelector((state) => state.auth);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  useEffect(() => {
+    if (success && user) {
+      toast.success("You are registered successfully");
+      navigate("/user/dashboard");
+      setFormData({ name: "", email: "", password: "", confirmPassword: "" });
+    } else if (error) {
+      toast.error(error);
+    }
+  }, [success, error, navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Add password confirmation validation
-    if (password !== confirmPassword) {
-      alert("Passwords do not match!");
+
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Passwords do not match!");
       return;
     }
-    // Add your registration logic here
-    console.log("Registration data:", { username, email, password });
+
+    // Dispatch Redux register action
+    dispatch(registerUser(formData));
   };
 
   return (
     <div className="relative min-h-screen bg-black flex items-center justify-center p-4 overflow-hidden">
       {/* Animated Background Circles */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Decorative geometric shapes */}
         <div className="absolute top-20 left-80 w-16 h-16 border-2 border-amber-500/30 rounded-lg rotate-45"></div>
         <div className="absolute bottom-20 right-10 w-12 h-12 border-2 border-amber-500/20 rounded-full"></div>
         <div className="absolute top-1/3 right-20 w-8 h-8 border border-amber-500/30 rotate-12"></div>
@@ -42,7 +64,6 @@ const Register = () => {
           Back To Home
         </button>
         <div className="bg-black/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-amber-500/20">
-          {/* Header */}
           <div className="text-center mb-10">
             <h1 className="text-3xl font-bold text-gray-200 mb-2">
               Create Account
@@ -50,12 +71,11 @@ const Register = () => {
             <p className="text-gray-400">Register to get started</p>
           </div>
 
-          {/* Register Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Username Field */}
+            {/* Username */}
             <div>
               <label className="block text-sm font-medium text-gray-400 mb-2">
-                Username
+                Name
               </label>
               <div className="relative">
                 <div className="absolute left-4 top-1/2 -translate-y-1/2">
@@ -63,8 +83,9 @@ const Register = () => {
                 </div>
                 <input
                   type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
                   className="w-full pl-12 pr-4 py-3 bg-gray-200/10 border border-gray-200/20 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all duration-200 placeholder-gray-500 text-gray-200"
                   placeholder="Enter Your Username"
                   required
@@ -72,7 +93,7 @@ const Register = () => {
               </div>
             </div>
 
-            {/* Email Field */}
+            {/* Email */}
             <div>
               <label className="block text-sm font-medium text-gray-400 mb-2">
                 Email Address
@@ -83,8 +104,9 @@ const Register = () => {
                 </div>
                 <input
                   type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
                   className="w-full pl-12 pr-4 py-3 bg-gray-200/10 border border-gray-200/20 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all duration-200 placeholder-gray-500 text-gray-200"
                   placeholder="Enter Your Email"
                   required
@@ -92,7 +114,7 @@ const Register = () => {
               </div>
             </div>
 
-            {/* Password Field */}
+            {/* Password */}
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="block text-sm font-medium text-gray-400">
@@ -105,8 +127,9 @@ const Register = () => {
                 </div>
                 <input
                   type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
                   className="w-full pl-12 pr-12 py-3 bg-gray-200/10 border border-gray-200/20 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all duration-200 placeholder-gray-500 text-gray-200"
                   placeholder="Enter your password"
                   required
@@ -125,7 +148,7 @@ const Register = () => {
               </div>
             </div>
 
-            {/* Confirm Password Field */}
+            {/* Confirm Password */}
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="block text-sm font-medium text-gray-400">
@@ -138,8 +161,9 @@ const Register = () => {
                 </div>
                 <input
                   type={showConfirmPassword ? "text" : "password"}
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
                   className="w-full pl-12 pr-12 py-3 bg-gray-200/10 border border-gray-200/20 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all duration-200 placeholder-gray-500 text-gray-200"
                   placeholder="Confirm your password"
                   required
@@ -160,12 +184,12 @@ const Register = () => {
 
             <button
               type="submit"
-              className="w-full py-3 px-4 bg-amber-500 text-black font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 hover:bg-amber-600"
+              disabled={loading}
+              className="w-full py-3 px-4 bg-amber-500 text-black font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 hover:bg-amber-600 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Register
+              {loading ? "Registering..." : "Register"}
             </button>
 
-            {/* Login link */}
             <p className="text-center text-gray-400 text-sm">
               Already have an account?{" "}
               <span
