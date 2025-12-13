@@ -38,12 +38,11 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
     },
   ];
 
-  // Quick Actions Section
   const quickActions = [
     {
       label: "Add New Product",
       icon: FiPlus,
-      path: "/admin/dashboard/products/add",
+      path: "/add-product",
     },
   ];
 
@@ -108,7 +107,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         </div>
       </nav>
 
-      {/* Quick Actions Section (Alternative Design) */}
+      {/* Add product Button */}
       <div className="mt-8 px-4">
         <div className="space-y-2">
           {quickActions.map((action) => (

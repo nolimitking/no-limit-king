@@ -15,7 +15,7 @@ export const authMiddleware = async (req, res, next) => {
     const token = authHeader.split(" ")[1];
 
     // Verify token
-    const decoded = jwt.verify(token, process.env.JWT_TOKEN);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // Attach user info to the request
     req.user = {
@@ -26,6 +26,6 @@ export const authMiddleware = async (req, res, next) => {
 
     next();
   } catch (error) {
-    return res.status(500).json({ message: "Invalid or expired token" });
+    return res.status(500).json({ message: error.message });
   }
 };

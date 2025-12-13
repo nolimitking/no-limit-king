@@ -7,10 +7,21 @@ import deleteProduct from "../controllers/product/deleteProduct.js";
 
 import { authMiddleware } from "../middleware/authMiddleware.js";
 import { verifyAdmin } from "../middleware/verifyAdmin.js";
+import {
+  upload,
+  uploadMultipleToCloudinary,
+} from "../middleware/uploadImages.js";
 
 const router = express.Router();
 
-router.post("/create", authMiddleware, verifyAdmin, createProduct);
+router.post(
+  "/create",
+  authMiddleware,
+  verifyAdmin,
+  upload.array("images", 4),
+  uploadMultipleToCloudinary,
+  createProduct
+);
 router.get("/get-all", authMiddleware, getAllProducts);
 router.get("/get-details/:id", authMiddleware, getProductDetails);
 router.put("/update/:id", authMiddleware, verifyAdmin, updateProduct);
