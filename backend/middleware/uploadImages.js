@@ -15,7 +15,7 @@ export const upload = multer({ storage });
 
 // Cloudinary stream upload wrapper
 const streamUpload = (fileBuffer) => {
-  return new promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream((error, result) => {
       if (error) reject(error);
       else resolve(result);
@@ -32,13 +32,11 @@ export const uploadMultipleToCloudinary = async (req, res, next) => {
       return res.status(400).json({ message: "No file uploaded" });
     }
 
-    const uploadPromises = req.files.map((file) =>
-      streamUpload(file.fileBuffer)
-    );
+    const uploadPromises = req.files.map((file) => streamUpload(file.buffer));
 
     const results = await Promise.all(uploadPromises);
 
-    req.imageURLs = results.map((r) => r.secure.url);
+    req.imageURLs = results.map((r) => r.secure_url);
 
     next();
   } catch (error) {

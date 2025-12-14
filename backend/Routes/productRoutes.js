@@ -22,8 +22,8 @@ router.post(
   uploadMultipleToCloudinary,
   createProduct
 );
-router.get("/get-all", authMiddleware, getAllProducts);
-router.get("/get-details/:id", authMiddleware, getProductDetails);
+router.get("/get-all", getAllProducts);
+router.get("/get-details/:id", getProductDetails);
 router.put("/update/:id", authMiddleware, verifyAdmin, updateProduct);
 router.delete("/delete/:id", authMiddleware, verifyAdmin, deleteProduct);
 

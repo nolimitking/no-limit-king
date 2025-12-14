@@ -2,50 +2,48 @@ import Product from "../../models/Product.js";
 
 const createProduct = async (req, res) => {
   try {
-    const { name, description, price, category } = req.boy;
+    const { name, description, price, category } = req.body;
 
-    // Use imageURLs from the middleware
+    // images from Cloudinary middleware
     const images = req.imageURLs || [];
 
+    // Validate required fields
     if (!name || !description || !price || !category) {
       return res.status(400).json({
-        message:
-          "Missing required fields: name, description, price, category, images ",
+        message: "Missing required fields: name, description, price, category",
       });
     }
 
-    // If the product already exist with the name
-    const existingName = await Product.findOne({ name });
+    // Convert price (form-data sends strings)
+    const parsedPrice = Number(price);
 
-    if (existingName) {
+    if (isNaN(parsedPrice) || parsedPrice <= 0) {
       return res.status(400).json({
-        message: `Product already exist with this name ${existingName}`,
+        message: "Price must be a number greater than 0",
       });
     }
 
-    if (price <= 0 && typeof price !== "number") {
-      return res
-        .status(400)
-        .json({ message: "Price must be greater then 0 and must a number" });
-    }
+    // Check if product exists
+    const existingProduct = await Product.findOne({ name: name.trim() });
 
-    // Trim strings and validate
-    const trimmedName = name.trim();
-    const trimmedDescription = description.trim();
-    const trimmedCategory = category.trim();
+    if (existingProduct) {
+      return res.status(400).json({
+        message: "Product already exists with this name",
+      });
+    }
 
     // Create product
     const product = await Product.create({
-      name: trimmedName,
-      description: trimmedDescription,
-      price: price,
-      category: trimmedCategory,
+      name: name.trim(),
+      description: description.trim(),
+      price: parsedPrice,
+      category: category.trim(),
       images,
     });
 
     res.status(201).json({
-      data: product,
       message: "Product created successfully",
+      data: product,
     });
   } catch (error) {
     res.status(500).json({

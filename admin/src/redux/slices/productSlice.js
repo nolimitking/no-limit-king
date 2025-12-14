@@ -41,7 +41,7 @@ export const createProduct = createAsyncThunk(
       const token = getToken();
       if (!token) return rejectWithValue("No authentication token found");
 
-      const { data } = await API.post("/product/create", productData, {
+      const { data } = await API.post("/products/create", productData, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -195,11 +195,11 @@ const productSlice = createSlice({
       })
       .addCase(deleteProduct.fulfilled, (state, action) => {
         state.operationLoading = false;
-        state.items = state.items.filter((p) => p._id !== action.payload.id);
+        state.items = state.items.filter((p) => p._id !== action.payload);
         state.totalProducts = Math.max(0, state.totalProducts - 1);
 
         // Also clear if it's the current product being viewed
-        if (state.product && state.product._id === action.payload._id) {
+        if (state.product && state.product._id === action.payload) {
           state.product = null;
         }
       })

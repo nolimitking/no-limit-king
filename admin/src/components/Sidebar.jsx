@@ -23,12 +23,12 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
     {
       label: "All Products",
       icon: FiPackage,
-      path: "/admin/dashboard/products",
+      path: "/all-products",
     },
     {
       label: "All Orders",
       icon: FiShoppingCart,
-      path: "/admin/dashboard/orders",
+      path: "/all-orders",
     },
     {
       label: "Back Home",
