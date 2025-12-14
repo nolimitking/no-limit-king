@@ -5,12 +5,7 @@ import { createProduct, clearError } from "../../redux/slices/productSlice";
 import { toast } from "react-toastify";
 import { FaPlus, FaTimes, FaSpinner } from "react-icons/fa";
 
-// Simple loader component
-const Loader = ({ size = "medium" }) => (
-  <div className={`loader ${size}`}>Loading...</div>
-);
-
-const CreateProducts = () => {
+const CreateProduct = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -93,7 +88,7 @@ const CreateProducts = () => {
       .unwrap()
       .then(() => {
         toast.success("Product created successfully!");
-        navigate("/all-products");
+        navigate("/admin/products");
       })
       .catch((err) => toast.error(err || "Failed to create product"));
   };
@@ -283,4 +278,4 @@ const CreateProducts = () => {
   );
 };
 
-export default CreateProducts;
+export default CreateProduct;

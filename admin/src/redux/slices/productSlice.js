@@ -12,7 +12,9 @@ export const fetchProducts = createAsyncThunk(
   "products/fetchAll",
   async ({ page = 1, limit = 12 } = {}, { rejectWithValue }) => {
     try {
-      const { data } = await API.get(`/products?page=${page}&limit=${limit}`);
+      const { data } = await API.get(
+        `/products/get-all/?page=${page}&limit=${limit}`
+      );
       return data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message);

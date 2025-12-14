@@ -6,6 +6,7 @@ const getProductDetails = async (req, res) => {
     if (!product) {
       res.status(400).json({ message: "Product not found" });
     }
+    return res.status(201).json(product);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

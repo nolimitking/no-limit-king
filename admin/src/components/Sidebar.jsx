@@ -12,7 +12,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const isActive = (path) => location.pathname === path;
+  const isActive = (path) => location.pathname.startsWith(path);
 
   const menuItems = [
     {
@@ -23,12 +23,12 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
     {
       label: "All Products",
       icon: FiPackage,
-      path: "/all-products",
+      path: "/admin/products",
     },
     {
       label: "All Orders",
       icon: FiShoppingCart,
-      path: "/all-orders",
+      path: "/admin/orders",
     },
     {
       label: "Back Home",
@@ -42,7 +42,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
     {
       label: "Add New Product",
       icon: FiPlus,
-      path: "/add-product",
+      path: "/admin/add/product",
     },
   ];
 
