@@ -1,11 +1,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import API from "../../api/API";
 
-// Helper function to get token
+/* =========================
+   Helper: Get JWT Token
+========================= */
 const getToken = () => {
   const userInfo = JSON.parse(localStorage.getItem("userInfo") || null);
   return userInfo?.token;
 };
+
+/* =========================
+   THUNKS
+========================= */
 
 // Get all products (paginated)
 export const fetchProducts = createAsyncThunk(
@@ -47,33 +53,36 @@ export const createProduct = createAsyncThunk(
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      return data;
+      return data.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message);
     }
   }
 );
 
-// Update product
+// Update product (admin)
 export const updateProduct = createAsyncThunk(
   "products/updateProduct",
-  async ({ id, update }, { rejectWithValue }) => {
+  async ({ id, data }, { rejectWithValue }) => {
     try {
       const token = getToken();
       if (!token) return rejectWithValue("No authentication token found");
 
-      const { data } = await API.put(`/products/update/${id}`, update, {
-        headers: { Authorization: `Bearer ${token}` },
+      const response = await API.put(`/products/update/${id}`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
       });
 
-      return data;
+      return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message);
     }
   }
 );
 
-// Delete product
+// Delete product (admin)
 export const deleteProduct = createAsyncThunk(
   "products/deleteProduct",
   async (id, { rejectWithValue }) => {
@@ -81,7 +90,7 @@ export const deleteProduct = createAsyncThunk(
       const token = getToken();
       if (!token) return rejectWithValue("No authentication token found");
 
-      const { data } = await API.delete(`/products/delete/${id}`, {
+      await API.delete(`/products/delete/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -92,7 +101,35 @@ export const deleteProduct = createAsyncThunk(
   }
 );
 
-// Slice
+// Publish / Unpublish product (admin)
+export const togglePublishProduct = createAsyncThunk(
+  "products/togglePublish",
+  async (id, { rejectWithValue }) => {
+    try {
+      const token = getToken();
+      if (!token) return rejectWithValue("No authentication token found");
+
+      const { data } = await API.put(
+        `/products/publish/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message);
+    }
+  }
+);
+
+/* =========================
+   SLICE
+========================= */
+
 const productSlice = createSlice({
   name: "products",
   initialState: {
@@ -106,8 +143,8 @@ const productSlice = createSlice({
     hasPrevPage: false,
 
     loading: false,
+    operationLoading: false,
     error: null,
-    operationLoading: false, //  Separate loading for admin operations
   },
 
   reducers: {
@@ -121,7 +158,7 @@ const productSlice = createSlice({
 
   extraReducers: (builder) => {
     builder
-      // Fetch all products (paginated)
+      /* ---------- FETCH ALL ---------- */
       .addCase(fetchProducts.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -140,7 +177,7 @@ const productSlice = createSlice({
         state.error = action.payload;
       })
 
-      // Fetch product details
+      /* ---------- FETCH DETAILS ---------- */
       .addCase(fetchProductDetails.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -154,7 +191,7 @@ const productSlice = createSlice({
         state.error = action.payload;
       })
 
-      // Create product
+      /* ---------- CREATE ---------- */
       .addCase(createProduct.pending, (state) => {
         state.operationLoading = true;
         state.error = null;
@@ -169,19 +206,20 @@ const productSlice = createSlice({
         state.error = action.payload;
       })
 
-      // Update product
+      /* ---------- UPDATE ---------- */
       .addCase(updateProduct.pending, (state) => {
         state.operationLoading = true;
         state.error = null;
       })
       .addCase(updateProduct.fulfilled, (state, action) => {
+        state.operationLoading = false;
+
         const index = state.items.findIndex(
           (p) => p._id === action.payload._id
         );
         if (index !== -1) state.items[index] = action.payload;
 
-        // Also update if it's the current product being viewed
-        if (state.product && state.product._id === action.payload._id) {
+        if (state.product?._id === action.payload._id) {
           state.product = action.payload;
         }
       })
@@ -190,7 +228,7 @@ const productSlice = createSlice({
         state.error = action.payload;
       })
 
-      // Delete product
+      /* ---------- DELETE ---------- */
       .addCase(deleteProduct.pending, (state) => {
         state.operationLoading = true;
         state.error = null;
@@ -200,12 +238,35 @@ const productSlice = createSlice({
         state.items = state.items.filter((p) => p._id !== action.payload);
         state.totalProducts = Math.max(0, state.totalProducts - 1);
 
-        // Also clear if it's the current product being viewed
-        if (state.product && state.product._id === action.payload) {
+        if (state.product?._id === action.payload) {
           state.product = null;
         }
       })
       .addCase(deleteProduct.rejected, (state, action) => {
+        state.operationLoading = false;
+        state.error = action.payload;
+      })
+
+      /* ---------- PUBLISH / UNPUBLISH ---------- */
+      .addCase(togglePublishProduct.pending, (state) => {
+        state.operationLoading = true;
+        state.error = null;
+      })
+      .addCase(togglePublishProduct.fulfilled, (state, action) => {
+        state.operationLoading = false;
+
+        const updatedProduct = action.payload;
+
+        const index = state.items.findIndex(
+          (p) => p._id === updatedProduct._id
+        );
+        if (index !== -1) state.items[index] = updatedProduct;
+
+        if (state.product?._id === updatedProduct._id) {
+          state.product = updatedProduct;
+        }
+      })
+      .addCase(togglePublishProduct.rejected, (state, action) => {
         state.operationLoading = false;
         state.error = action.payload;
       });
@@ -213,4 +274,5 @@ const productSlice = createSlice({
 });
 
 export const { clearError, clearProduct } = productSlice.actions;
+
 export default productSlice.reducer;

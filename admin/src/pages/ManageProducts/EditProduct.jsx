@@ -8,6 +8,7 @@ import {
   clearProduct,
 } from "../../redux/slices/productSlice";
 import { FaSpinner, FaArrowLeft } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 const EditProduct = () => {
   const { id } = useParams();
@@ -18,36 +19,29 @@ const EditProduct = () => {
     (state) => state.products
   );
 
-  const [formData, setFormData] = useState({
+  const [formDataState, setFormDataState] = useState({
     name: "",
     description: "",
     price: "",
     category: "",
-    images: [],
   });
 
-  const [notification, setNotification] = useState({
-    show: false,
-    message: "",
-    type: "success",
-  });
+  const [images, setImages] = useState([]); // new images
 
-  // Fetch product details on mount
+  // Fetch product details
   useEffect(() => {
     if (id) dispatch(fetchProductDetails(id));
-
     return () => dispatch(clearProduct());
   }, [dispatch, id]);
 
-  // Populate form when product is loaded
+  // Populate form
   useEffect(() => {
     if (product) {
-      setFormData({
+      setFormDataState({
         name: product.name || "",
         description: product.description || "",
         price: product.price || "",
         category: product.category || "",
-        images: product.images || [],
       });
     }
   }, [product]);
@@ -55,42 +49,33 @@ const EditProduct = () => {
   // Handle errors
   useEffect(() => {
     if (error) {
-      showNotification(error, "error");
+      toast.error(error);
       dispatch(clearError());
     }
   }, [error, dispatch]);
 
-  const showNotification = (message, type = "success") => {
-    setNotification({ show: true, message, type });
-    setTimeout(() => {
-      setNotification((prev) => ({ ...prev, show: false }));
-    }, 3000);
-  };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleImageChange = (e) => {
-    const files = Array.from(e.target.files);
-    setFormData((prev) => ({ ...prev, images: files }));
+    setFormDataState((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.name || !formData.description || !formData.price) {
-      showNotification("Please fill all required fields", "error");
-      return;
-    }
+    const formData = new FormData();
+    formData.append("name", formDataState.name);
+    formData.append("description", formDataState.description);
+    formData.append("price", formDataState.price);
+    formData.append("category", formDataState.category);
+
+    images.forEach((img) => formData.append("images", img));
 
     try {
       await dispatch(updateProduct({ id, data: formData })).unwrap();
-      showNotification("Product updated successfully", "success");
+      toast.success("Product updated successfully");
       navigate(`/admin/product/details/${id}`);
     } catch (err) {
-      showNotification(err || "Failed to update product", "error");
+      toast.error(err || "Update failed");
     }
   };
 
@@ -104,20 +89,6 @@ const EditProduct = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      {notification.show && (
-        <div className="fixed top-4 right-4 bg-white shadow-lg rounded-lg p-4 z-50">
-          <p
-            className={`text-sm font-medium ${
-              notification.type === "success"
-                ? "text-green-700"
-                : "text-red-700"
-            }`}
-          >
-            {notification.message}
-          </p>
-        </div>
-      )}
-
       <div className="max-w-3xl mx-auto px-4">
         <Link
           to={`/admin/product/details/${id}`}
@@ -137,7 +108,7 @@ const EditProduct = () => {
               <input
                 type="text"
                 name="name"
-                value={formData.name}
+                value={formDataState.name}
                 onChange={handleChange}
                 className="w-full border rounded px-3 py-2"
                 required
@@ -149,7 +120,7 @@ const EditProduct = () => {
               <label className="block mb-1 font-semibold">Description</label>
               <textarea
                 name="description"
-                value={formData.description}
+                value={formDataState.description}
                 onChange={handleChange}
                 className="w-full border rounded px-3 py-2"
                 rows="4"
@@ -163,7 +134,7 @@ const EditProduct = () => {
               <input
                 type="number"
                 name="price"
-                value={formData.price}
+                value={formDataState.price}
                 onChange={handleChange}
                 className="w-full border rounded px-3 py-2"
                 required
@@ -176,7 +147,7 @@ const EditProduct = () => {
               <input
                 type="text"
                 name="category"
-                value={formData.category}
+                value={formDataState.category}
                 onChange={handleChange}
                 className="w-full border rounded px-3 py-2"
               />
@@ -188,18 +159,20 @@ const EditProduct = () => {
               <input
                 type="file"
                 multiple
-                onChange={handleImageChange}
+                accept="image/*"
+                onChange={(e) => setImages([...e.target.files])}
                 className="w-full"
               />
-              {formData.images.length > 0 && (
+
+              {product?.images?.length > 0 && (
                 <div className="flex gap-2 mt-2 flex-wrap">
-                  {formData.images.map((img, i) => (
-                    <span
+                  {product.images.map((img, i) => (
+                    <img
                       key={i}
-                      className="bg-gray-200 px-2 py-1 rounded text-sm"
-                    >
-                      {img.name || img}
-                    </span>
+                      src={img}
+                      alt="product"
+                      className="w-20 h-20 object-cover rounded"
+                    />
                   ))}
                 </div>
               )}
@@ -211,7 +184,10 @@ const EditProduct = () => {
               className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 flex items-center justify-center"
             >
               {operationLoading ? (
-                <FaSpinner className="animate-spin mr-2" />
+                <>
+                  <FaSpinner className="animate-spin mr-2" />
+                  Updating...
+                </>
               ) : (
                 "Update Product"
               )}

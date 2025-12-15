@@ -4,6 +4,7 @@ import {
   fetchProducts,
   deleteProduct,
   clearError,
+  togglePublishProduct,
 } from "../../redux/slices/productSlice";
 import { Link } from "react-router-dom";
 import {
@@ -15,8 +16,11 @@ import {
   FaChevronLeft,
   FaChevronRight,
   FaSpinner,
+  FaGlobe,
+  FaEyeSlash,
 } from "react-icons/fa";
 import { MdCategory } from "react-icons/md";
+import { toast } from "react-toastify";
 
 const Products = () => {
   const dispatch = useDispatch();
@@ -30,6 +34,7 @@ const Products = () => {
     hasNextPage,
     hasPrevPage,
     totalProducts,
+    operationLoading,
   } = useSelector((state) => state.products);
 
   const [page, setPage] = useState(1);
@@ -39,15 +44,19 @@ const Products = () => {
   const userInfo = JSON.parse(localStorage.getItem("userInfo") || "null");
   const isAdmin = userInfo?.role === "admin";
 
-  // Fetch products
+  /* =========================
+     FETCH PRODUCTS
+  ========================= */
   useEffect(() => {
     dispatch(fetchProducts({ page, limit: 12 }));
   }, [dispatch, page]);
 
-  // Handle error
+  /* =========================
+     HANDLE ERRORS
+  ========================= */
   useEffect(() => {
     if (error) {
-      console.error(error);
+      toast.error(error); // show toast notification for errors
       dispatch(clearError());
     }
   }, [error, dispatch]);
@@ -59,21 +68,44 @@ const Products = () => {
     }
   };
 
-  // Handle delete
+  /* =========================
+     DELETE PRODUCT
+  ========================= */
   const handleDeleteConfirm = async () => {
     if (!productToDelete) return;
 
     try {
       await dispatch(deleteProduct(productToDelete._id)).unwrap();
-      // Refetch products after deletion
       dispatch(fetchProducts({ page, limit: 12 }));
+      toast.success(`Product "${productToDelete.name}" deleted successfully!`);
       setOpenDeleteDialog(false);
       setProductToDelete(null);
     } catch (err) {
+      toast.error("Failed to delete product.");
       console.error("Failed to delete product:", err);
     }
   };
 
+  /* =========================
+     PUBLISH / UNPUBLISH
+  ========================= */
+  const handleTogglePublish = async (id) => {
+    try {
+      const result = await dispatch(togglePublishProduct(id)).unwrap();
+      toast.success(
+        `Product "${result.name}" ${
+          result.isPublished ? "published" : "unpublished"
+        } successfully!`
+      );
+    } catch (err) {
+      toast.error("Failed to toggle publish status.");
+      console.error("Failed to toggle publish:", err);
+    }
+  };
+
+  /* =========================
+     LOADING STATE
+  ========================= */
   if (loading && products.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -109,9 +141,23 @@ const Products = () => {
         {products.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {products.map((product) => (
-              <div key={product._id} className="bg-white rounded-xl shadow p-4">
+              <div
+                key={product._id}
+                className="bg-white rounded-xl shadow p-4 relative"
+              >
+                {/* STATUS BADGE */}
+                <span
+                  className={`absolute top-3 right-3 px-2 py-1 text-xs rounded ${
+                    product.isPublished
+                      ? "bg-green-100 text-green-700"
+                      : "bg-gray-200 text-gray-600"
+                  }`}
+                >
+                  {product.isPublished ? "Published" : "Draft"}
+                </span>
+
                 <img
-                  src={product.images}
+                  src={product.images?.[0]}
                   alt={product.name}
                   className="h-40 w-full object-cover rounded"
                 />
@@ -131,23 +177,39 @@ const Products = () => {
                   </span>
                 </div>
 
-                <div className="flex justify-between mt-4">
+                {/* ACTIONS */}
+                <div className="flex justify-between mt-4 items-center">
                   <Link
                     to={`/admin/product/details/${product._id}`}
                     className="text-blue-600 text-sm"
                   >
                     <FaEye className="inline mr-1" />
-                    View Details
+                    View
                   </Link>
 
                   {isAdmin && (
-                    <div className="flex gap-2 items-end">
+                    <div className="flex gap-3 items-center">
+                      {/* PUBLISH TOGGLE */}
+                      <button
+                        disabled={operationLoading}
+                        onClick={() => handleTogglePublish(product._id)}
+                        className={`text-sm ${
+                          product.isPublished
+                            ? "text-gray-600"
+                            : "text-green-600"
+                        }`}
+                        title={product.isPublished ? "Unpublish" : "Publish"}
+                      >
+                        {product.isPublished ? <FaEyeSlash /> : <FaGlobe />}
+                      </button>
+
                       <Link
                         to={`/admin/product/edit/${product._id}`}
                         className="text-yellow-600"
                       >
                         <FaEdit />
                       </Link>
+
                       <button
                         onClick={() => {
                           setProductToDelete(product);
@@ -172,7 +234,7 @@ const Products = () => {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex justify-center mt-8 gap-2">
+          <div className="flex justify-center mt-8 gap-4 items-center">
             <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={!hasPrevPage}
@@ -194,9 +256,9 @@ const Products = () => {
         )}
       </div>
 
-      {/* Delete Confirmation Dialog */}
+      {/* DELETE CONFIRMATION */}
       {openDeleteDialog && (
-        <div className="fixed inset-0 bg-black/20 bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded shadow-lg w-96 text-center">
             <h2 className="text-xl font-bold mb-4">Confirm Delete</h2>
             <p className="mb-4">
