@@ -3,13 +3,20 @@ import Cart from "../../models/Cart.js";
 const getCart = async (req, res) => {
   try {
     const userId = req.user?.id || null;
-    const { guestId } = req.body;
+    const { guestId } = req.query;
 
-    const cart = await Cart.findOne({
-      user: userId,
-      guestId: userId ? null : guestId,
-    }).populate("items.product");
+    let query = {};
 
+    if (userId) {
+      query.user = userId;
+    } else if (guestId) {
+      query.guestId = guestId;
+    } else {
+      // No user or guestId, return empty cart
+      return res.json({ items: [], totalPrice: 0 });
+    }
+
+    const cart = await Cart.findOne(query).populate("items.product");
     res.json(cart || { items: [], totalPrice: 0 });
   } catch (error) {
     res.status(500).json({ message: error.message });

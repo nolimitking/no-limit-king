@@ -2,7 +2,7 @@ import Cart from "../../models/Cart.js";
 
 const clearCart = async (req, res) => {
   try {
-    const userId = req.user?.id;
+    const userId = req.user.id;
     await Cart.findOneAndDelete({ user: userId });
 
     res.status(200).json({ message: "Cart cleared" });
