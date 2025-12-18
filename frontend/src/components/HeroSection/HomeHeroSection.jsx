@@ -1,7 +1,29 @@
 import { motion } from "framer-motion";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../redux/slices/cartSlice";
+import {products} from "../../redux/slices/productSlice"
 import Kit from "../../assets/Kit.GIF";
 
 const HomeHeroSection = () => {
+  const dispatch = useDispatch();
+
+  // Assuming you have a product ID for this kit
+  const productId = "premium-beard-kit-001";
+
+  const handleAddToCart = () => {
+    dispatch(
+      addToCart({
+        productId,
+        quantity: 1,
+      })
+    ).then((result) => {
+      if (result.meta.requestStatus === "fulfilled") {
+        // Optional: Show success message or notification
+        console.log("Added to cart successfully!");
+      }
+    });
+  };
+
   return (
     <section className="relative min-h-screen flex items-center justify-center sm:mt-32 px-4 py-20 overflow-hidden">
       <div className="relative z-10 w-full max-w-6xl mx-auto">
@@ -31,6 +53,7 @@ const HomeHeroSection = () => {
               <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-32 h-px bg-gradient-to-r from-transparent via-amber-500 to-transparent"></div>
             </motion.div>
           </motion.div>
+
           {/* Centered Kit Image */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
@@ -64,6 +87,7 @@ const HomeHeroSection = () => {
               />
             </div>
           </motion.div>
+
           {/* Call to Action */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -96,12 +120,16 @@ const HomeHeroSection = () => {
             </motion.div>
 
             <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-              <button className="relative rounded-xl bg-gradient-to-r from-amber-600 to-amber-500 text-white px-4 py-4 rounded-xl text-sm font-medium overflow-hidden">
+              {/* ADD TO CARD */}
+              <button
+                onClick={handleAddToCart}
+                className="relative rounded-xl bg-gradient-to-r from-amber-600 to-amber-500 text-white px-4 py-4 rounded-xl text-sm font-medium overflow-hidden group"
+              >
                 <span className="relative z-10 text-black/80">
                   Add To Cart - $39.99
                 </span>
                 <motion.div
-                  className="bg-gradient-to-r from-amber-500 to-amber-400"
+                  className="absolute inset-0 bg-gradient-to-r from-amber-500 to-amber-400"
                   initial={{ x: "-100%" }}
                   whileHover={{ x: 0 }}
                   transition={{ duration: 0.3 }}

@@ -1,8 +1,11 @@
 import Product from "../../models/Product.js";
 
-const getProductDetails = async (req, res) => {
+const getProductDetailsPublished = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findOne({
+      _id: req.params.id,
+      isPublished: true,
+    });
     if (!product) {
       res.status(400).json({ message: "Product not found" });
     }
@@ -12,4 +15,4 @@ const getProductDetails = async (req, res) => {
   }
 };
 
-export default getProductDetails;
+export default getProductDetailsPublished;

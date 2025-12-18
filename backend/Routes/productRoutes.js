@@ -1,7 +1,9 @@
 import express from "express";
 import createProduct from "../controllers/product/createProduct.js";
 import getAllProducts from "../controllers/product/getAllProducts.js";
+import getAllProductsPublished from "../controllers/product/getAllProductsPublished.js";
 import getProductDetails from "../controllers/product/getProductDetails.js";
+import getProductDetailsPublished from "../controllers/product/getProductDetailsPublished.js";
 import updateProduct from "../controllers/product/updateProduct.js";
 import deleteProduct from "../controllers/product/deleteProduct.js";
 import togglePublishProduct from "../controllers/product/togglePublishProduct.js";
@@ -24,7 +26,9 @@ router.post(
   createProduct
 );
 router.get("/get-all", getAllProducts);
+router.get("/get-all-publish", getAllProductsPublished);
 router.get("/get-details/:id", getProductDetails);
+router.get("/get-details-publish/:id", getProductDetailsPublished);
 router.put(
   "/update/:id",
   authMiddleware,

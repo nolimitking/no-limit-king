@@ -1,33 +1,42 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import API from "../../api/API";
 
-// Get all products (paginated)
+// Fetch all published products (paginated)
+
 export const fetchProducts = createAsyncThunk(
   "products/fetchAll",
   async ({ page = 1, limit = 12 } = {}, { rejectWithValue }) => {
     try {
-      const { data } = await API.get(`/products?page=${page}&limit=${limit}`);
+      const { data } = await API.get(
+        `/products-get-all-publish?page=${page}&limit=${limit}`
+      );
       return data;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message);
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch products"
+      );
     }
   }
 );
 
-// Get single product
+//Fetch single published product
+
 export const fetchProductDetails = createAsyncThunk(
   "products/fetchProductDetails",
   async (id, { rejectWithValue }) => {
     try {
-      const { data } = await API.get(`/products/get-details/${id}`);
+      const { data } = await API.get(`/products/get-details-publish/${id}`);
       return data;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message);
+      return rejectWithValue(
+        error.response?.data?.message || "Product not found"
+      );
     }
   }
 );
 
-// Slice
+// Product Slice
+
 const productSlice = createSlice({
   name: "products",
   initialState: {
@@ -44,11 +53,18 @@ const productSlice = createSlice({
     error: null,
   },
 
-  reducers: {},
+  reducers: {
+    // Optional: reset product details when leaving page
+    clearProductDetails: (state) => {
+      state.product = null;
+    },
+  },
 
   extraReducers: (builder) => {
     builder
-      // Fetch all products (paginated)
+
+      // Fetch all products
+
       .addCase(fetchProducts.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -69,9 +85,11 @@ const productSlice = createSlice({
       })
 
       // Fetch product details
+
       .addCase(fetchProductDetails.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.product = null;
       })
       .addCase(fetchProductDetails.fulfilled, (state, action) => {
         state.loading = false;
@@ -84,4 +102,5 @@ const productSlice = createSlice({
   },
 });
 
+export const { clearProductDetails } = productSlice.actions;
 export default productSlice.reducer;
