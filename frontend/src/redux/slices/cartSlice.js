@@ -50,6 +50,43 @@ export const addToCart = createAsyncThunk(
   }
 );
 
+export const updateCartQuantity = createAsyncThunk(
+  "cart/updateCartQuantity",
+  async ({ productId, quantity, itemId }, { rejectWithValue }) => {
+    // Added itemId as optional
+    try {
+      const token = getToken();
+      const guestId = token ? null : getGuestId();
+
+      const config = token
+        ? {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        : {};
+
+      // For debugging
+      console.log("🛒 Thunk payload:", {
+        productId,
+        quantity,
+        itemId,
+        guestId,
+      });
+
+      const response = await API.put(
+        "/cart/update-quantity",
+        { productId, quantity, guestId },
+        config
+      );
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+
 export const getCart = createAsyncThunk(
   "cart/getCart",
   async (_, { rejectWithValue }) => {
@@ -69,34 +106,6 @@ export const getCart = createAsyncThunk(
         params,
         ...config,
       });
-
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response?.data?.message || error.message);
-    }
-  }
-);
-
-export const updateCartQuantity = createAsyncThunk(
-  "cart/updateCartQuantity",
-  async ({ productId, quantity }, { rejectWithValue }) => {
-    try {
-      const guestId = getGuestId();
-      const token = getToken();
-
-      const config = token
-        ? {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        : {};
-
-      const response = await API.put(
-        "/cart/update",
-        { productId, quantity, guestId },
-        config
-      );
 
       return response.data;
     } catch (error) {
@@ -138,6 +147,7 @@ export const clearCart = createAsyncThunk(
   "cart/clearCart",
   async (_, { rejectWithValue }) => {
     try {
+      const guestId = getGuestId();
       const token = getToken();
 
       if (!token) {
@@ -150,7 +160,7 @@ export const clearCart = createAsyncThunk(
         },
       };
 
-      const response = await API.delete("/cart/delete", config);
+      const response = await API.delete("/cart/clear", { guestId }, config);
 
       return response.data;
     } catch (error) {

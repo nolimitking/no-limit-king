@@ -24,9 +24,9 @@ connectDB();
 const PORT = process.env.PORT || 3000;
 
 // API
+app.use("/api/cart", cartRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/auth", authRoutes);
-app.use("/api/cart", cartRoutes);
 app.use("/api/payment", checkoutRoutes);
 
 app.get("/", (req, res) => {

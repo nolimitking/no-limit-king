@@ -1,4 +1,6 @@
 import { Routes, Route } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { getCart } from "./redux/slices/cartSlice";
 
 import MainLayout from "./layouts/MainLayout";
 import Home from "./pages/Home";
@@ -15,8 +17,15 @@ import Register from "./pages/Auth/Register";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useEffect } from "react";
 
 const App = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getCart());
+  }, [dispatch]);
+
   return (
     <div>
       <ToastContainer />

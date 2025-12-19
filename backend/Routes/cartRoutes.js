@@ -10,10 +10,10 @@ import { optionalAuth } from "../middleware/optionalAuth.js";
 
 const router = express.Router();
 
+router.put("/update-quantity", updateCartQuantity);
 router.post("/add", addToCart);
 router.get("/get", optionalAuth, getCart);
 router.post("/merge", authMiddleware, mergeCart);
 router.delete("/clear", authMiddleware, clearCart);
-router.put("/update", updateCartQuantity);
 
 export default router;

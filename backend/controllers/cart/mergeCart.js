@@ -28,6 +28,7 @@ const mergeCart = async (req, res) => {
       guestCart.user = userId;
       guestCart.guestId = null;
       await guestCart.save();
+      await guestCart.populate("items.product", "name price image");
       return res.json(guestCart);
     }
 
@@ -48,6 +49,8 @@ const mergeCart = async (req, res) => {
     await userCart.save();
 
     await guestCart.deleteOne();
+
+    await userCart.populate("items.product", "name price image");
 
     res.json(userCart);
   } catch (error) {

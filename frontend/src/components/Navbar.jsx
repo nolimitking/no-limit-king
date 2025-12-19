@@ -15,15 +15,15 @@ import {
   LogOut,
 } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
-import CartSidebar from "./CartSidebar"; // Add this import
+import CartSidebar from "./CartSidebar";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  const { items } = useSelector((state) => state.cart); // Get cart items
+  const { items } = useSelector((state) => state.cart);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isCartOpen, setIsCartOpen] = useState(false); // Add cart state
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   // Clear localStorage and head the user to the home page
   const handleLogout = () => {
@@ -43,6 +43,8 @@ const Navbar = () => {
     { id: "about", label: "About", path: "/about", icon: Info },
     { id: "contact", label: "Contact", path: "/contact", icon: Phone },
   ];
+
+  const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <nav>
@@ -93,9 +95,9 @@ const Navbar = () => {
                 className="cursor-pointer text-amber-500 hover:text-amber-600"
                 size={20}
               />
-              {items.length > 0 && (
+              {totalQuantity > 0 && (
                 <span className="absolute -top-2 -right-2 bg-amber-500 text-black text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
-                  {items.length}
+                  {totalQuantity}
                 </span>
               )}
             </div>

@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../redux/slices/cartSlice";
-import {products} from "../../redux/slices/productSlice"
 import Kit from "../../assets/Kit.GIF";
 
 const HomeHeroSection = () => {
@@ -13,7 +12,7 @@ const HomeHeroSection = () => {
   const handleAddToCart = () => {
     dispatch(
       addToCart({
-        productId,
+        productId: "69446cec71879644a567fb35",
         quantity: 1,
       })
     ).then((result) => {
