@@ -18,7 +18,7 @@ const getCart = async (req, res) => {
 
     const cart = await Cart.findOne(query).populate({
       path: "items.product",
-      select: "name price image",
+      select: "name price images",
     });
     res.json(cart || { items: [], totalPrice: 0 });
   } catch (error) {

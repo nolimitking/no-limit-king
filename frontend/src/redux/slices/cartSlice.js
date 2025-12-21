@@ -66,14 +66,6 @@ export const updateCartQuantity = createAsyncThunk(
           }
         : {};
 
-      // For debugging
-      console.log("🛒 Thunk payload:", {
-        productId,
-        quantity,
-        itemId,
-        guestId,
-      });
-
       const response = await API.put(
         "/cart/update-quantity",
         { productId, quantity, guestId },

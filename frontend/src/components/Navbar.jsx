@@ -156,12 +156,12 @@ const Navbar = () => {
             <div className="relative">
               <ShoppingBag
                 onClick={() => setIsCartOpen(true)}
-                className="cursor-pointer text-amber-500"
+                className="cursor-pointer text-amber-500 hover:text-amber-600"
                 size={20}
               />
-              {items.length > 0 && (
+              {totalQuantity > 0 && (
                 <span className="absolute -top-2 -right-2 bg-amber-500 text-black text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
-                  {items.length}
+                  {totalQuantity}
                 </span>
               )}
             </div>
@@ -177,7 +177,7 @@ const Navbar = () => {
             )}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2 rounded-lg text-amber-500 hover:bg-gray-100"
+              className="p-2 rounded-lg text-amber-500 hover:bg-gray-100 transition-colors duration-200"
             >
               {isMenuOpen ? (
                 <X size={24} className="text-amber-500" />
@@ -187,9 +187,98 @@ const Navbar = () => {
             </button>
           </div>
         </div>
-      </div>
 
-      {/* Rest of your Navbar code remains the same... */}
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <div className="md:hidden mt-4">
+            {/* Mobile Navigation Menu */}
+            <div className="flex flex-col gap-2 border border-amber-500/40 shadow-2xl font-semibold rounded-xl p-2 mb-4">
+              {menuItems.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <NavLink
+                    key={item.id}
+                    to={item.path}
+                    onClick={() => setIsMenuOpen(false)}
+                    className={({ isActive }) =>
+                      `cursor-pointer px-4 py-3 rounded-lg transition-colors duration-200 flex items-center gap-2 ${
+                        isActive
+                          ? "bg-amber-500 text-black"
+                          : "hover:bg-black hover:text-amber-600 text-amber-500"
+                      }`
+                    }
+                  >
+                    <Icon size={18} />
+                    <span>{item.label}</span>
+                  </NavLink>
+                );
+              })}
+            </div>
+
+            {/* Mobile User Actions */}
+            <div className="border border-amber-500/40 shadow-2xl font-semibold rounded-xl p-4">
+              {user ? (
+                <>
+                  {/* User Info */}
+                  <div className="flex items-center gap-3 mb-4">
+                    <span className="font-bold text-black w-8 h-8 p-5 flex justify-center items-center text-sm rounded-full bg-amber-500">
+                      {user.name[0].toUpperCase()}
+                    </span>
+                    <div>
+                      <p className="text-amber-500 font-bold">{user.name}</p>
+                      <p className="text-amber-500/80 text-sm">{user.email}</p>
+                    </div>
+                  </div>
+
+                  {/* Dashboard Button */}
+                  <div
+                    onClick={handleDashboardNavigation}
+                    className="cursor-pointer px-4 py-3 rounded-lg transition-colors duration-200 flex items-center gap-2 text-amber-500 hover:bg-black hover:text-amber-600 mb-2"
+                  >
+                    <User size={18} />
+                    <span>Dashboard</span>
+                  </div>
+
+                  {/* Logout Button */}
+                  <div
+                    onClick={handleLogout}
+                    className="cursor-pointer px-4 py-3 rounded-lg transition-colors duration-200 flex items-center gap-2 bg-amber-500 text-black hover:bg-amber-600"
+                  >
+                    <LogOut size={18} />
+                    <span>Logout</span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  {/* Login Button */}
+                  <div
+                    onClick={() => {
+                      navigate("/login");
+                      setIsMenuOpen(false);
+                    }}
+                    className="cursor-pointer px-4 py-3 rounded-lg transition-colors duration-200 flex items-center gap-2 text-amber-500 hover:bg-black hover:text-amber-600 mb-2"
+                  >
+                    <LogIn size={18} />
+                    <span>Login</span>
+                  </div>
+
+                  {/* Register Button */}
+                  <div
+                    onClick={() => {
+                      navigate("/register");
+                      setIsMenuOpen(false);
+                    }}
+                    className="cursor-pointer px-4 py-3 rounded-lg transition-colors duration-200 flex items-center gap-2 bg-amber-500 text-black hover:bg-amber-600"
+                  >
+                    <UserPlus size={18} />
+                    <span>Register</span>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
     </nav>
   );
 };

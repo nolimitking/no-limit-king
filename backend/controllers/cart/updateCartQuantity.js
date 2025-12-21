@@ -3,9 +3,6 @@ import calculateTotal from "../../utility/calculateTotal.js";
 
 const updateCartQuantity = async (req, res) => {
   try {
-    console.log("🔥 updateCartQuantity HIT");
-    console.log("📦 Request body:", req.body); // Debug log
-
     const { productId, quantity, guestId } = req.body;
     const userId = req.user?.id || null;
 
@@ -79,7 +76,7 @@ const updateCartQuantity = async (req, res) => {
       return res.status(404).json({ message: "Product not in cart" });
     }
   } catch (error) {
-    console.error("❌ updateCartQuantity ERROR:", error);
+    console.error(error);
     res.status(500).json({ message: error.message });
   }
 };
