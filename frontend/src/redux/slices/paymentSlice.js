@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import API from "../../api/api"; // axios instance
+import API from "../../api/API"; // axios instance
 
 export const createCheckoutSession = createAsyncThunk(
   "payment/createCheckoutSession",
@@ -13,7 +13,7 @@ export const createCheckoutSession = createAsyncThunk(
       }
 
       const response = await API.post(
-        "/payment/create-checkout-session",
+        "/payment/checkout-session",
         {},
         {
           headers: {

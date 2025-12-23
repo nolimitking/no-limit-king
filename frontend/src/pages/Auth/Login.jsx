@@ -3,7 +3,7 @@ import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../redux/slices/authSlice";
-
+import { mergeCart, getCart } from "../../redux/slices/cartSlice";
 import { toast } from "react-toastify";
 
 const Login = () => {
@@ -17,11 +17,13 @@ const Login = () => {
   const navigate = useNavigate();
 
   const { loading, error, success, user } = useSelector((state) => state.auth);
+  const { loading: cartLoading } = useSelector((state) => state.cart);
 
   // Update form value
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -29,13 +31,44 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (success && user) {
-      toast.success(success);
-      navigate("/user/dashboard");
-    } else if (error) {
-      toast.error(error);
-    }
-  }, [success, error, user, navigate]);
+    const handleSuccessfulLogin = async () => {
+      if (success && user) {
+        try {
+          toast.success(success);
+
+          // Check if there's a guest cart to merge
+          const guestId = localStorage.getItem("guestId");
+          if (guestId) {
+            // Dispatch mergeCart to merge guest cart with user cart
+            const result = await dispatch(mergeCart());
+
+            if (mergeCart.fulfilled.match(result)) {
+              // After successful merge, fetch the updated cart
+              await dispatch(getCart());
+              toast.info("Your cart has been merged with your account");
+            } else {
+              // If merge fails, just fetch the user's cart
+              await dispatch(getCart());
+            }
+          } else {
+            // No guest cart, just fetch the user's cart
+            await dispatch(getCart());
+          }
+
+          // Navigate to dashboard after cart operations
+          navigate("/user/dashboard");
+        } catch (err) {
+          console.error("Cart merge error:", err);
+          // Still navigate to dashboard even if cart merge fails
+          navigate("/user/dashboard");
+        }
+      } else if (error) {
+        toast.error(error);
+      }
+    };
+
+    handleSuccessfulLogin();
+  }, [success, error, user, navigate, dispatch]);
 
   return (
     <div className="relative min-h-screen bg-black flex items-center justify-center p-4 overflow-hidden">

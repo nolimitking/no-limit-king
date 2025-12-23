@@ -25,23 +25,25 @@ const orderSchema = new mongoose.Schema(
       required: true,
     },
     items: [orderItemSchema],
-    totalPrice: { type: Number, required: true },
-    ShippingStatus: {
+    totalPrice: { type: Number },
+    shippingStatus: {
       type: String,
       enum: ["pending", "processing", "shipped"],
       default: "pending",
     },
     shippingAddress: {
-      address: { type: String, required: true },
-      city: { type: String, required: true },
-      postalCode: { type: String, required: true },
-      country: { type: String, required: true },
+      name: { type: String },
+      address: { type: String },
+      city: { type: String },
+      state: { type: String },
+      postalCode: { type: String },
+      country: { type: String },
     },
     paymentStatus: {
       type: String,
       default: "pending",
     },
-    stripePaymentIntentId: {
+    stripePaymentIntent: {
       type: String,
     },
   },

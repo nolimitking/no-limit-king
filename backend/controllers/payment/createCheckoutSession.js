@@ -1,5 +1,6 @@
 import Stripe from "stripe";
 import Cart from "../../models/Cart.js";
+import Order from "../../models/Order.js";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -12,6 +13,17 @@ const createCheckoutSession = async (req, res) => {
     if (!cart || cart.items.length === 0) {
       return res.status(400).json({ message: "Cart is empty" });
     }
+
+    const order = await Order.create({
+      user: userId,
+      items: cart.items.map((item) => ({
+        product: item.product._id,
+        quantity: item.quantity,
+        price: item.price,
+      })),
+      totalPrice: cart.totalPrice,
+      paymentStatus: "pending",
+    });
 
     // Prepare line items for Stripe
     const line_items = cart.items.map((item) => ({
@@ -31,14 +43,19 @@ const createCheckoutSession = async (req, res) => {
       line_items,
       mode: "payment",
       success_url: `${process.env.CLIENT_URL}/checkout-success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.CLIENT_URL}/cart`,
+      cancel_url: `${process.env.CLIENT_URL}/checkout-cancel`,
+      shipping_address_collection: {
+        allowed_countries: ["US"],
+      },
       metadata: {
-        userId,
+        userId: userId.toString(),
+        orderId: order._id.toString(),
       },
     });
 
     res.json({ url: session.url });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: error.message });
   }
 };

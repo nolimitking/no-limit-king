@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../../redux/slices/authSlice";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -27,8 +26,8 @@ const Register = () => {
   useEffect(() => {
     if (success && user) {
       toast.success("You are registered successfully");
-      navigate("/user/dashboard");
       setFormData({ name: "", email: "", password: "", confirmPassword: "" });
+      navigate("/user/dashboard");
     } else if (error) {
       toast.error(error);
     }

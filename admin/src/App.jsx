@@ -16,6 +16,7 @@ const App = () => {
       <ToastContainer />
       <Routes>
         <Route path="/" element={<Login />} />
+
         <Route path="/admin" element={<AdminDashboardLayout />}>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="add/product" element={<AddProduct />} />

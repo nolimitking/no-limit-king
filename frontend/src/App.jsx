@@ -9,15 +9,21 @@ import Contact from "./pages/Contact";
 import Products from "./pages/Products/Products";
 import ProductsDetails from "./pages/Products/ProductsDetails";
 import Checkout from "./pages/Checkout";
+import CheckoutSuccess from "./pages/CheckoutSuccess";
+import CheckoutCancel from "./pages/CheckoutCancel";
 import OrderSuccess from "./pages/OrderSuccess";
 
 import AuthLayout from "./layouts/AuthLayout";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 
+import UserDashboardLayout from "./layouts/UserDashboardLayout";
+import MyOrders from "./components/UserDashboard/MyOrders";
+
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
+import Dashboard from "./components/UserDashboard/Dashboard";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -38,6 +44,8 @@ const App = () => {
           <Route path="/products" element={<Products />} />
           <Route path="/products/:id" element={<ProductsDetails />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/checkout-success" element={<CheckoutSuccess />} />
+          <Route path="/checkout-cancel" element={<CheckoutCancel />} />
           <Route path="/order-success" element={<OrderSuccess />} />
         </Route>
 
@@ -45,6 +53,12 @@ const App = () => {
         <Route element={<AuthLayout />}>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+        </Route>
+
+        {/* User Dashboard */}
+        <Route path="/user" element={<UserDashboardLayout />}>
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="orders" element={<MyOrders />} />
         </Route>
       </Routes>
     </div>

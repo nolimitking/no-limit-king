@@ -190,7 +190,7 @@ const Navbar = () => {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden mt-4">
+          <div className="md:hidden mt-4 absolute top-25 left-4 right-4 z-10">
             {/* Mobile Navigation Menu */}
             <div className="flex flex-col gap-2 border border-amber-500/40 shadow-2xl font-semibold rounded-xl p-2 mb-4">
               {menuItems.map((item) => {

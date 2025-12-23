@@ -5,11 +5,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-import {
-  getCart,
-  updateCartQuantity,
-  mergeCart,
-} from "../redux/slices/cartSlice";
+import { getCart, updateCartQuantity } from "../redux/slices/cartSlice";
 
 const CartSidebar = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
@@ -52,7 +48,6 @@ const CartSidebar = ({ isOpen, onClose }) => {
   // Checkout button handler
   const handleCheckout = async () => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo") || "null");
-    const guestId = localStorage.getItem("guestId");
 
     if (!userInfo?.token) {
       toast.error("You must login to proceed to checkout");
@@ -60,21 +55,8 @@ const CartSidebar = ({ isOpen, onClose }) => {
       return;
     }
 
-    try {
-      // Check if there's a guest cart that needs merging
-      if (guestId) {
-        // Dispatch mergeCart to merge guest cart with user cart
-        const result = await dispatch(mergeCart()).unwrap();
-        toast.success("Cart merged successfully");
-        console.log("Merge result:", result);
-      }
-
-      onClose();
-      navigate("/checkout");
-    } catch (error) {
-      console.error("Merge cart error:", error);
-      toast.error(error || "Failed to merge cart. Please try again.");
-    }
+    onClose();
+    navigate("/checkout");
   };
 
   return (
@@ -181,7 +163,7 @@ const CartSidebar = ({ isOpen, onClose }) => {
                             </p>
 
                             {/* Quantity Controls */}
-                            <div className="flex items-center gap-3 mt-3">
+                            <div className="flex items-center mt-3">
                               <button
                                 onClick={() =>
                                   handleUpdateQuantity(item, item.quantity - 1)

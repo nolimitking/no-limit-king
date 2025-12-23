@@ -9,12 +9,12 @@ import checkoutRoutes from "./Routes/checkoutRoutes.js";
 
 const app = express();
 
-import stripWebhook from "./controllers/payment/stripeWebhook.js";
+import stripeWebhook from "./controllers/payment/stripeWebhook.js";
 
 app.post(
   "/api/payment/webhook",
   express.raw({ type: "application/json" }),
-  stripWebhook
+  stripeWebhook
 );
 
 app.use(express.json());
