@@ -6,6 +6,7 @@ import productRoutes from "./Routes/productRoutes.js";
 import authRoutes from "./Routes/authRoutes.js";
 import cartRoutes from "./Routes/cartRoutes.js";
 import checkoutRoutes from "./Routes/checkoutRoutes.js";
+import orderRoutes from "./Routes/orderRoutes.js";
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/payment", checkoutRoutes);
+app.use("/api/order", orderRoutes);
 
 app.get("/", (req, res) => {
   res.send("Backend is running");

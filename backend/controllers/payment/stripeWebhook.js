@@ -1,6 +1,7 @@
 import Stripe from "stripe";
 import Order from "../../models/Order.js";
 import Cart from "../../models/Cart.js";
+import SendEmail from "../../utility/SendEmail.js";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -44,6 +45,16 @@ const stripeWebhook = async (req, res) => {
       shippingAddress,
       stripePaymentIntent: session.payment_intent,
     });
+
+    try {
+      await SendEmail({
+        to: "l@nolimitking.com",
+        subject: "You have a new order",
+        text: `You have a new order from ${session.customer_details?.name}`,
+      });
+    } catch (err) {
+      console.error("Email failed:", err.message);
+    }
 
     // Optional: clear cart AFTER successful payment
     if (userId) {
