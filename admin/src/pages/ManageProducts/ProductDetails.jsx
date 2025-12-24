@@ -118,7 +118,7 @@ const ProductDetails = () => {
           Back to products
         </Link>
 
-        <div className="bg-white rounded-xl shadow-lg p-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="bg-white rounded-xl shadow-lg p-6 grid grid-cols-1 lg:grid-cols-2 gap-2">
           {/* Images */}
           <div>
             <img
@@ -128,7 +128,7 @@ const ProductDetails = () => {
             />
 
             {images.length > 1 && (
-              <div className="grid grid-cols-4 gap-2 mt-4">
+              <div className="grid grid-cols-8 gap-2 mt-4">
                 {images.map((img, i) => (
                   <img
                     key={i}

@@ -71,7 +71,6 @@ export const updateProduct = createAsyncThunk(
       const response = await API.put(`/products/update/${id}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
         },
       });
 

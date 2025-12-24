@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import {
@@ -11,33 +11,42 @@ import { FaSpinner, FaArrowLeft } from "react-icons/fa";
 import { toast } from "react-toastify";
 
 const EditProduct = () => {
+  // Hooks
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // Redux State
   const { product, loading, error, operationLoading } = useSelector(
     (state) => state.products
   );
 
-  const [formDataState, setFormDataState] = useState({
+  // Local State
+  const [formData, setFormData] = useState({
     name: "",
     description: "",
     price: "",
     category: "",
   });
+  const [newImages, setNewImages] = useState([]);
 
-  const [images, setImages] = useState([]); // new images
+  // ==================== Effects ====================
 
   // Fetch product details
   useEffect(() => {
-    if (id) dispatch(fetchProductDetails(id));
-    return () => dispatch(clearProduct());
+    if (id) {
+      dispatch(fetchProductDetails(id));
+    }
+
+    return () => {
+      dispatch(clearProduct());
+    };
   }, [dispatch, id]);
 
-  // Populate form
+  // Populate form when product data is available
   useEffect(() => {
     if (product) {
-      setFormDataState({
+      setFormData({
         name: product.name || "",
         description: product.description || "",
         price: product.price || "",
@@ -46,7 +55,7 @@ const EditProduct = () => {
     }
   }, [product]);
 
-  // Handle errors
+  // Handle API errors
   useEffect(() => {
     if (error) {
       toast.error(error);
@@ -54,139 +63,207 @@ const EditProduct = () => {
     }
   }, [error, dispatch]);
 
-  const handleChange = (e) => {
+  // ==================== Handlers ====================
+
+  const handleInputChange = useCallback((e) => {
     const { name, value } = e.target;
-    setFormDataState((prev) => ({ ...prev, [name]: value }));
-  };
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  }, []);
+
+  const handleImageChange = useCallback((e) => {
+    if (e.target.files) {
+      setNewImages(Array.from(e.target.files));
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formData = new FormData();
-    formData.append("name", formDataState.name);
-    formData.append("description", formDataState.description);
-    formData.append("price", formDataState.price);
-    formData.append("category", formDataState.category);
-
-    images.forEach((img) => formData.append("images", img));
-
     try {
-      await dispatch(updateProduct({ id, data: formData })).unwrap();
+      const payload = prepareFormData();
+
+      await dispatch(updateProduct({ id, data: payload })).unwrap();
+
       toast.success("Product updated successfully");
       navigate(`/admin/product/details/${id}`);
     } catch (err) {
-      toast.error(err || "Update failed");
+      toast.error(err?.message || "Failed to update product");
     }
   };
 
+  // ==================== Helper Functions ====================
+
+  const prepareFormData = () => {
+    // If new images are uploaded, use FormData
+    if (newImages.length > 0) {
+      const formData = new FormData();
+
+      Object.entries(formData).forEach(([key, value]) => {
+        formData.append(key, value);
+      });
+
+      newImages.forEach((image) => {
+        formData.append("images", image);
+      });
+
+      return formData;
+    }
+
+    // Otherwise, send as JSON
+    return {
+      name: formData.name.trim(),
+      description: formData.description.trim(),
+      price: Number(formData.price),
+      category: formData.category.trim(),
+    };
+  };
+
+  // ==================== Render States ====================
+
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <FaSpinner className="w-12 h-12 animate-spin text-blue-600" />
+      <div className="flex min-h-screen items-center justify-center">
+        <FaSpinner className="h-12 w-12 animate-spin text-blue-600" />
       </div>
     );
   }
 
+  // ==================== Main Render ====================
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-3xl mx-auto px-4">
+      <div className="mx-auto max-w-3xl px-4">
+        {/* Navigation */}
         <Link
           to={`/admin/product/details/${id}`}
-          className="inline-flex items-center text-gray-600 mb-6"
+          className="mb-6 inline-flex items-center text-gray-600 hover:text-gray-900"
         >
           <FaArrowLeft className="mr-2" />
           Back to Product Details
         </Link>
 
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <h1 className="text-2xl font-bold mb-6">Edit Product</h1>
+        {/* Main Content */}
+        <div className="rounded-xl bg-white p-6 shadow-lg">
+          <h1 className="mb-6 text-2xl font-bold text-gray-900">
+            Edit Product
+          </h1>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Name */}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Product Name */}
             <div>
-              <label className="block mb-1 font-semibold">Name</label>
+              <label className="mb-2 block text-sm font-medium text-gray-700">
+                Product Name *
+              </label>
               <input
                 type="text"
                 name="name"
-                value={formDataState.name}
-                onChange={handleChange}
-                className="w-full border rounded px-3 py-2"
+                value={formData.name}
+                onChange={handleInputChange}
+                className="w-full rounded-lg border border-gray-300 px-4 py-2.5 focus:border-blue-500 focus:ring-blue-500"
                 required
+                placeholder="Enter product name"
               />
             </div>
 
             {/* Description */}
             <div>
-              <label className="block mb-1 font-semibold">Description</label>
+              <label className="mb-2 block text-sm font-medium text-gray-700">
+                Description *
+              </label>
               <textarea
                 name="description"
-                value={formDataState.description}
-                onChange={handleChange}
-                className="w-full border rounded px-3 py-2"
-                rows="4"
+                value={formData.description}
+                onChange={handleInputChange}
+                rows={4}
+                className="w-full rounded-lg border border-gray-300 px-4 py-2.5 focus:border-blue-500 focus:ring-blue-500"
                 required
+                placeholder="Enter product description"
               />
             </div>
 
             {/* Price */}
             <div>
-              <label className="block mb-1 font-semibold">Price</label>
+              <label className="mb-2 block text-sm font-medium text-gray-700">
+                Price *
+              </label>
               <input
                 type="number"
                 name="price"
-                value={formDataState.price}
-                onChange={handleChange}
-                className="w-full border rounded px-3 py-2"
+                value={formData.price}
+                onChange={handleInputChange}
+                step="0.01"
+                min="0"
+                className="w-full rounded-lg border border-gray-300 px-4 py-2.5 focus:border-blue-500 focus:ring-blue-500"
                 required
+                placeholder="0.00"
               />
             </div>
 
             {/* Category */}
             <div>
-              <label className="block mb-1 font-semibold">Category</label>
+              <label className="mb-2 block text-sm font-medium text-gray-700">
+                Category
+              </label>
               <input
                 type="text"
                 name="category"
-                value={formDataState.category}
-                onChange={handleChange}
-                className="w-full border rounded px-3 py-2"
+                value={formData.category}
+                onChange={handleInputChange}
+                className="w-full rounded-lg border border-gray-300 px-4 py-2.5 focus:border-blue-500 focus:ring-blue-500"
+                placeholder="Enter product category"
               />
             </div>
 
-            {/* Images */}
+            {/* Image Upload */}
             <div>
-              <label className="block mb-1 font-semibold">Images</label>
+              <label className="mb-2 block text-sm font-medium text-gray-700">
+                Add New Images
+              </label>
               <input
                 type="file"
                 multiple
                 accept="image/*"
-                onChange={(e) => setImages([...e.target.files])}
-                className="w-full"
+                onChange={handleImageChange}
+                className="w-full cursor-pointer rounded-lg border border-gray-300 p-2.5 file:mr-4 file:cursor-pointer file:rounded-lg file:border-0 file:bg-blue-50 file:px-4 file:py-2.5 file:text-blue-700 hover:file:bg-blue-100"
               />
+              <p className="mt-1 text-sm text-gray-500">
+                Select multiple images to upload
+              </p>
 
+              {/* Existing Images Preview */}
               {product?.images?.length > 0 && (
-                <div className="flex gap-2 mt-2 flex-wrap">
-                  {product.images.map((img, i) => (
-                    <img
-                      key={i}
-                      src={img}
-                      alt="product"
-                      className="w-20 h-20 object-cover rounded"
-                    />
-                  ))}
+                <div className="mt-4">
+                  <p className="mb-2 text-sm font-medium text-gray-700">
+                    Existing Images
+                  </p>
+                  <div className="flex flex-wrap gap-3">
+                    {product.images.map((image, index) => (
+                      <div key={index} className="relative">
+                        <img
+                          src={image}
+                          alt={`Product ${index + 1}`}
+                          className="h-20 w-20 rounded-lg object-cover"
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
 
+            {/* Submit Button */}
             <button
               type="submit"
               disabled={operationLoading}
-              className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 flex items-center justify-center"
+              className="flex w-full items-center justify-center rounded-lg bg-blue-600 px-6 py-3.5 font-semibold text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70"
             >
               {operationLoading ? (
                 <>
-                  <FaSpinner className="animate-spin mr-2" />
-                  Updating...
+                  <FaSpinner className="mr-2 animate-spin" />
+                  Updating Product...
                 </>
               ) : (
                 "Update Product"
