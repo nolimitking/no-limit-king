@@ -59,6 +59,7 @@ const orderShippingStatus = async (req, res) => {
     // 6️⃣ Respond to admin
     res.status(200).json({
       message: `Shipping status updated and email sent to your client ${order.user.name}`,
+      order: order,
       shippingStatus: status,
     });
   } catch (error) {

@@ -12,7 +12,7 @@ router.get("/all", authMiddleware, verifyAdmin, orders);
 router.get("/details/:id", orderDetails);
 router.get("/my", authMiddleware, myOrders);
 router.put(
-  "/update-status-shipping/:id",
+  "/update-status-shipping/:orderId",
   authMiddleware,
   verifyAdmin,
   orderShippingStatus
