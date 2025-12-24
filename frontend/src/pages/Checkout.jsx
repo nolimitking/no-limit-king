@@ -107,7 +107,7 @@ const Checkout = () => {
             <button
               onClick={handleCheckout}
               disabled={paymentLoading}
-              className="w-full bg-amber-500 hover:bg-amber-400 text-black font-medium py-3 px-4 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+              className="w-full bg-amber-500 hover:bg-amber-600 text-black font-medium py-3 px-4 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
             >
               {paymentLoading ? (
                 <>

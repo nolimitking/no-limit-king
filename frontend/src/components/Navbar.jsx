@@ -47,7 +47,7 @@ const Navbar = () => {
 
   // Handle dynamic routes
   const handleDashboardNavigation = () => {
-    navigate("/user");
+    navigate("/user/orders");
     setIsMenuOpen(false);
   };
 
