@@ -31,7 +31,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       <div className="pb-6 pt-8 px-6 flex justify-between items-center border-b border-gray-800">
         <div>
           <h1
-            onClick={() => navigate("/user/dashboard")}
+            onClick={() => navigate("/user/orders")}
             className="text-xl font-bold text-white cursor-pointer"
           >
             Client Dashboard

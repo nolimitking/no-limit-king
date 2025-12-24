@@ -30,7 +30,7 @@ const Header = ({ toggleSidebar }) => {
           <FiMenu className="w-6 h-6" />
         </button>
         <h2
-          onClick={() => navigate("/user/dashboard")}
+          onClick={() => navigate("/user/orders")}
           className="text-xl font-bold text-white cursor-pointer"
         >
           Overview

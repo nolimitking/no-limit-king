@@ -24,7 +24,6 @@ import OrderDetails from "./components/UserDashboard/OrderDetails";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
-import Dashboard from "./components/UserDashboard/Dashboard";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -58,7 +57,6 @@ const App = () => {
 
         {/* User Dashboard */}
         <Route path="/user" element={<UserDashboardLayout />}>
-          <Route path="dashboard" element={<Dashboard />} />
           <Route path="orders" element={<MyOrders />} />
           <Route path="orderDetails/:id" element={<OrderDetails />} />
         </Route>
