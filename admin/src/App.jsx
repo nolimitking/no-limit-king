@@ -9,6 +9,7 @@ import Products from "./pages/ManageProducts/Products";
 import ProductDetails from "./pages/ManageProducts/ProductDetails";
 import EditProduct from "./pages/ManageProducts/EditProduct";
 import Orders from "./pages/orders/Orders";
+import OrderDetails from "./pages/orders/OrderDetails";
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
           <Route path="product/details/:id" element={<ProductDetails />} />
           <Route path="products" element={<Products />} />
           <Route path="orders" element={<Orders />} />
+          <Route path="orderDetails/:id" element={<OrderDetails />} />
         </Route>
       </Routes>
     </div>
