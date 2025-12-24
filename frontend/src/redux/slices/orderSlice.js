@@ -51,7 +51,7 @@ const orderSlice = createSlice({
     myOrders: [],
 
     // Single order details
-    currentOrder: null,
+    orderDetails: null,
 
     // Loading states
     loading: false,
@@ -73,8 +73,8 @@ const orderSlice = createSlice({
       state.detailsError = null;
       state.successMessage = null;
     },
-    clearCurrentOrder: (state) => {
-      state.currentOrder = null;
+    clearOrderDetails: (state) => {
+      state.orderDetails = null;
     },
     clearMyOrders: (state) => {
       state.myOrders = [];
@@ -104,7 +104,7 @@ const orderSlice = createSlice({
       })
       .addCase(getOrderDetails.fulfilled, (state, action) => {
         state.detailsLoading = false;
-        state.currentOrder = action.payload;
+        state.orderDetails = action.payload;
       })
       .addCase(getOrderDetails.rejected, (state, action) => {
         state.detailsLoading = false;
@@ -113,7 +113,7 @@ const orderSlice = createSlice({
   },
 });
 
-export const { clearOrderState, clearCurrentOrder, clearMyOrders } =
+export const { clearOrderState, clearOrderDetails, clearMyOrders } =
   orderSlice.actions;
 
 export default orderSlice.reducer;

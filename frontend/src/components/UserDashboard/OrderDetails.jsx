@@ -1,10 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  getOrderDetails,
-  updateOrderShippingStatus,
-} from "../../redux/slices/orderSlice";
+import { getOrderDetails } from "../../redux/slices/orderSlice";
 import { FiChevronLeft, FiCheckCircle, FiClock } from "react-icons/fi";
 import { RiCheckboxCircleFill, RiCloseCircleFill } from "react-icons/ri";
 
@@ -13,11 +10,7 @@ const OrderDetails = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { loading, error, orderDetails, updatingStatus } = useSelector(
-    (state) => state.orders
-  );
-
-  const [shippingStatus, setShippingStatus] = useState("");
+  const { loading, error, orderDetails } = useSelector((state) => state.order);
 
   useEffect(() => {
     if (id) {
@@ -25,19 +18,22 @@ const OrderDetails = () => {
     }
   }, [dispatch, id]);
 
-  useEffect(() => {
-    if (orderDetails?.shippingStatus) {
-      setShippingStatus(orderDetails.shippingStatus);
-    }
-  }, [orderDetails]);
-
   const handleBack = () => navigate(-1);
 
-  const handleUpdateStatus = () => {
-    dispatch(
-      updateOrderShippingStatus({
-        orderId: id,
-        status: shippingStatus,
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+
+    return (
+      date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }) +
+      " at " +
+      date.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
       })
     );
   };
@@ -52,7 +48,7 @@ const OrderDetails = () => {
       paid: {
         class: "bg-green-100 text-green-800",
         icon: FiCheckCircle,
-        text: "paid",
+        text: "Paid",
       },
       shipped: {
         class: "bg-blue-100 text-blue-800",
@@ -120,7 +116,6 @@ const OrderDetails = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-10">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Back Button */}
         <button
           onClick={handleBack}
           className="flex items-center mb-6 text-gray-700 hover:text-gray-900 font-medium transition-colors"
@@ -129,14 +124,12 @@ const OrderDetails = () => {
           Back To Orders
         </button>
 
-        {/* Order Card */}
         <div className="bg-white rounded-2xl shadow border border-gray-200 p-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-8">
             Order Details
           </h1>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Left */}
             <div className="space-y-4">
               <div className="bg-gray-50 p-4 rounded-lg">
                 <span className="font-semibold">Order ID:</span>{" "}
@@ -154,7 +147,6 @@ const OrderDetails = () => {
               </div>
             </div>
 
-            {/* Right */}
             <div className="space-y-4">
               <div className="bg-gray-50 p-4 rounded-lg flex justify-between items-center">
                 <span className="font-semibold">Payment Status:</span>
@@ -166,35 +158,9 @@ const OrderDetails = () => {
                 <StatusBadge status={orderDetails.shippingStatus} />
               </div>
 
-              {/* Admin Status Update */}
-              <div className="bg-gray-50 p-4 rounded-lg space-y-3">
-                <label className="block text-sm font-semibold text-gray-700">
-                  Update Shipping Status
-                </label>
-
-                <select
-                  value={shippingStatus}
-                  onChange={(e) => setShippingStatus(e.target.value)}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="pending">Pending</option>
-                  <option value="processing">Processing</option>
-                  <option value="shipped">Shipped</option>
-                  <option value="delivered">Delivered</option>
-                </select>
-
-                <button
-                  onClick={handleUpdateStatus}
-                  disabled={updatingStatus}
-                  className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
-                >
-                  {updatingStatus ? "Updating..." : "Update Status"}
-                </button>
-              </div>
-
               <div className="bg-gray-50 p-4 rounded-lg">
                 <span className="font-semibold">Created:</span>{" "}
-                {new Date(orderDetails.createdAt).toLocaleString()}
+                {formatDate(orderDetails.createdAt)}
               </div>
             </div>
           </div>

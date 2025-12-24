@@ -64,6 +64,7 @@ export const updateOrderShippingStatus = createAsyncThunk(
         { status },
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      console.log("Response:", response.data); // Add this
       return response.data;
     } catch (error) {
       return rejectWithValue(

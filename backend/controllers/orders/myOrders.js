@@ -7,9 +7,7 @@ const myOrders = async (req, res) => {
       return res.status(400).json({ message: "User id not found in token" });
     }
 
-    const orders = await Order.find({ user: userId }).toSorted({
-      createdAt: -1,
-    });
+    const orders = await Order.find({ user: userId });
 
     if (orders.length === 0) {
       return res.status(400).json({ message: "No orders found for this user" });

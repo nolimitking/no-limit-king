@@ -3,7 +3,7 @@ import Order from "../../models/Order.js";
 
 const orderShippingStatus = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { orderId } = req.params;
     const { status } = req.body;
 
     if (!orderId || !status) {

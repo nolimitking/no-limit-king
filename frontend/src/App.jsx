@@ -19,6 +19,7 @@ import Register from "./pages/Auth/Register";
 
 import UserDashboardLayout from "./layouts/UserDashboardLayout";
 import MyOrders from "./components/UserDashboard/MyOrders";
+import OrderDetails from "./components/UserDashboard/OrderDetails";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -59,6 +60,7 @@ const App = () => {
         <Route path="/user" element={<UserDashboardLayout />}>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="orders" element={<MyOrders />} />
+          <Route path="orderDetails/:id" element={<OrderDetails />} />
         </Route>
       </Routes>
     </div>

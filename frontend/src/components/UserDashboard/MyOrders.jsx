@@ -22,20 +22,30 @@ const Orders = () => {
   }, [dispatch, user]);
 
   const handleSelect = (id) => {
-    navigate(`/orders/${id}`);
+    navigate(`/user/orderDetails/${id}`);
   };
 
   const StatusBadge = ({ status }) => {
     const config = {
-      paid: {
-        class: "bg-green-100 text-green-800",
-        icon: FiCheckCircle,
-        label: "Paid",
-      },
       pending: {
         class: "bg-yellow-100 text-yellow-800",
         icon: FiClock,
         label: "Pending",
+      },
+      processing: {
+        class: "bg-purple-100 text-purple-800",
+        icon: FiClock,
+        label: "Processing",
+      },
+      shipped: {
+        class: "bg-blue-100 text-blue-800",
+        icon: FiClock,
+        label: "Shipped",
+      },
+      delivered: {
+        class: "bg-green-100 text-green-800",
+        icon: FiCheckCircle,
+        label: "Delivered",
       },
       failed: {
         class: "bg-red-100 text-red-800",
@@ -66,7 +76,7 @@ const Orders = () => {
 
   if (myOrdersLoading) {
     return (
-      <div className="flex items-center justify-center h-40 text-lg font-semibold">
+      <div className="flex items-center justify-center h-40 text-lg font-semibold text-gray-700">
         Loading your orders...
       </div>
     );
@@ -83,31 +93,47 @@ const Orders = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">My Orders</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">My Orders</h1>
 
-        <p className="text-gray-600 mb-8">Track and manage your orders.</p>
+        <p className="text-gray-600 mb-8">Track and manage your orders</p>
 
         {/* Orders Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {myOrders.length > 0 ? (
+          {myOrders?.length > 0 ? (
             myOrders.map((order) => (
               <div
                 key={order._id}
                 onClick={() => handleSelect(order._id)}
-                className="bg-white rounded-2xl shadow hover:shadow-md border border-gray-100 p-6 cursor-pointer transition-all duration-300"
+                className="bg-white rounded-2xl shadow border border-gray-100 p-6 cursor-pointer transition-all duration-300 hover:shadow hover:-translate-y-1"
               >
-                <h2 className="text-lg font-semibold text-gray-900 mb-2 truncate">
+                {/* Order ID */}
+                <h2 className="text-lg font-semibold text-gray-900 truncate">
                   Order #{order._id.slice(-6)}
                 </h2>
 
-                <div className="flex justify-between items-center mt-4">
-                  <span className="text-lg font-bold text-gray-900">
-                    ${order.totalPrice}
-                  </span>
-                  <StatusBadge status={order.paymentStatus} />
+                {/* Price & Status */}
+                <div className="mt-6 space-y-4">
+                  {/* Total Price */}
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-gray-500">
+                      Total Price
+                    </span>
+                    <span className="text-xl font-bold text-gray-900">
+                      ${order.totalPrice.toFixed(2)}
+                    </span>
+                  </div>
+
+                  {/* Shipping Status */}
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-gray-500">
+                      Shipping Status
+                    </span>
+                    <StatusBadge status={order.shippingStatus} />
+                  </div>
                 </div>
 
-                <p className="text-xs text-gray-500 mt-3">
+                {/* Date */}
+                <p className="text-xs text-gray-500 mt-6">
                   {new Date(order.createdAt).toLocaleDateString("en-US", {
                     year: "numeric",
                     month: "short",
