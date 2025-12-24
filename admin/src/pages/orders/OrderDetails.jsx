@@ -7,6 +7,7 @@ import {
 } from "../../redux/slices/orderSlice";
 import { FiChevronLeft, FiCheckCircle, FiClock } from "react-icons/fi";
 import { RiCheckboxCircleFill, RiCloseCircleFill } from "react-icons/ri";
+import { toast } from "react-toastify";
 
 const OrderDetails = () => {
   const { id } = useParams();
@@ -20,9 +21,7 @@ const OrderDetails = () => {
   const [shippingStatus, setShippingStatus] = useState("");
 
   useEffect(() => {
-    if (id) {
-      dispatch(getOrderDetails(id));
-    }
+    if (id) dispatch(getOrderDetails(id));
   }, [dispatch, id]);
 
   useEffect(() => {
@@ -34,12 +33,25 @@ const OrderDetails = () => {
   const handleBack = () => navigate(-1);
 
   const handleUpdateStatus = () => {
+    if (shippingStatus === orderDetails.shippingStatus) {
+      toast.warning("This status is already active for this order.");
+      return;
+    }
+
     dispatch(
       updateOrderShippingStatus({
         orderId: id,
         status: shippingStatus,
       })
-    );
+    )
+      .unwrap()
+      .then((res) => {
+        toast.success(res.message || "Shipping status updated successfully!");
+        dispatch(getOrderDetails(id)); // refresh order details
+      })
+      .catch((err) => {
+        toast.error(err.message || "Failed to update shipping status.");
+      });
   };
 
   const StatusBadge = ({ status }) => {
@@ -52,7 +64,7 @@ const OrderDetails = () => {
       paid: {
         class: "bg-green-100 text-green-800",
         icon: FiCheckCircle,
-        text: "paid",
+        text: "Paid",
       },
       shipped: {
         class: "bg-blue-100 text-blue-800",
@@ -78,7 +90,6 @@ const OrderDetails = () => {
     };
 
     const Icon = current.icon;
-
     return (
       <div
         className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold ${current.class}`}
