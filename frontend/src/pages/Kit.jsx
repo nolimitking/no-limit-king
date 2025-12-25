@@ -6,54 +6,47 @@ import "swiper/css/effect-coverflow";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-import bag from "../assets/bag.png";
-import billionaire_beard_conditioner from "../assets/billionaire_beard_conditioner.png";
-import billionaire_beard_straightener_brush from "../assets/billionaire_beard_straightener_brush.png";
-import billionaire_beard_oil from "../assets/billionaire_beard_oil.png";
-import billionaire_beard_wash from "../assets/billionaire_beard_wash.png";
-import billionaire_beard_balm from "../assets/billionaire_beard_balm.png";
-
-// Product data with full descriptions
+// Product data with full descriptions - using public paths
 const products = [
   {
     id: 1,
     name: "Gift Bag – No Limit King Billionaire Beard kit",
-    image: bag,
+    image: "/assets/bag.png",
     fullDescription:
       "A premium, stylish gift bag crafted to match the luxury of the No Limit King Billionaire Beard Kit. Durable, sleek, and designed for unforgettable gifting — the perfect finishing touch for the ultimate beard-care experience.",
   },
   {
     id: 2,
     name: "billionaire beard conditioner",
-    image: billionaire_beard_conditioner,
+    image: "/assets/billionaire_beard_conditioner.png",
     fullDescription:
       "Made with 100% natural ingredients to cleanse, soften, and deeply moisturize your beard. Enriched with Argan oil, Jojoba oil, aloe, green tea, and Provitamin B5, it leaves a luxurious scent with notes of sandalwood and champaca. After shampooing, massage through your beard, leave for 2–3 minutes, then rinse. For best results, pair with the Billionaire Beard Oil.",
   },
   {
     id: 3,
     name: "beard Straightener brush",
-    image: billionaire_beard_straightener_brush,
+    image: "/assets/billionaire_beard_straightener_brush.png",
     fullDescription:
       "The Billionaire Beard Straightener Brush is a premium heated comb designed for thicker and longer beards. For best results, wash and dry your beard thoroughly, apply a heat protectant, and section the hair before straightening. Glide the brush slowly from roots to ends without pausing too long to prevent heat damage. Finish with beard oil or balm for a smooth, polished look. Use sparingly to maintain beard health or consult a professional barber for expert styling.",
   },
   {
     id: 4,
     name: "billionaire beard oil",
-    image: billionaire_beard_oil,
+    image: "/assets/billionaire_beard_oil.png",
     fullDescription:
-      "Designed to promote rapid growth, repair damage, and provide softening and moisturizing benefits to your beard, leaving you feeling refreshed and emitting a luxurious scent. INGREDIENTS: Our formulation objective is to provide a rich beard oil abundant in natural and organic ingredients. Comprised of Argan, Jojoba, Apricot kernel, Sweet almond, Grapeseed, Vitamin E, Coconut, Avocado, Castor, Sunflower, Eucalyptus, Rosemary essential oils, Champaca, Rose, Lemon citrus, Black pepper, Sandalwood, and Laurel leaf. ",
+      "Designed to promote rapid growth, repair damage, and provide softening and moisturizing benefits to your beard, leaving you feeling refreshed and emitting a luxurious scent. INGREDIENTS: Our formulation objective is to provide a rich beard oil abundant in natural and organic ingredients. Comprised of Argan, Jojoba, Apricot kernel, Sweet almond, Grapeseed, Vitamin E, Coconut, Avocado, Castor, Sunflower, Eucalyptus, Rosemary essential oils, Champaca, Rose, Lemon citrus, Black pepper, Sandalwood, and Laurel leaf.",
   },
   {
     id: 5,
     name: "billionaire beard wash",
-    image: billionaire_beard_wash,
+    image: "/assets/billionaire_beard_wash.png",
     fullDescription:
-      "is expertly formulated to thoroughly cleanse, hydrate, soften, and detangle your beard. About this item: Our unique blend of botanical ingredients, including apricot and aloe, works in harmony with a carefully crafted blend of natural oils, featuring organic rosemary, coconut oil, jojoba, argan, and avocado oil. Our Nolimit beard wash set provides a deep cleanse and nourishment. Simply apply a small amount of shampoo, add water, massage into your beard, and the rich lather will take care of the rest.",
+      "Expertly formulated to thoroughly cleanse, hydrate, soften, and detangle your beard. About this item: Our unique blend of botanical ingredients, including apricot and aloe, works in harmony with a carefully crafted blend of natural oils, featuring organic rosemary, coconut oil, jojoba, argan, and avocado oil. Our Nolimit beard wash set provides a deep cleanse and nourishment. Simply apply a small amount of shampoo, add water, massage into your beard, and the rich lather will take care of the rest.",
   },
   {
     id: 6,
     name: "beard balm",
-    image: billionaire_beard_balm,
+    image: "/assets/billionaire_beard_balm.png",
     fullDescription:
       "No Limit Billionaire Beard Balm most used daily Conditioner and softener with champaca essential oil Smelling fresh and luxurious.",
   },
@@ -74,7 +67,7 @@ const Kit = () => {
   // Get the background image based on active slide
   const getBackgroundImage = () => {
     const product = products[activeSlideIndex % products.length];
-    return product?.image || Bag; // Fallback to first image
+    return product?.image || "/assets/bag.png";
   };
 
   return (
