@@ -42,7 +42,7 @@ const Login = () => {
 
           if (guestCart.length > 0) {
             // Merge guest cart with user cart
-            const result = await dispatch(mergeCart(guestCart));
+            const result = await dispatch(mergeCart(guestCart)).unwrap();
 
             if (mergeCart.fulfilled.match(result)) {
               toast.info("Your cart has been merged with your account");
