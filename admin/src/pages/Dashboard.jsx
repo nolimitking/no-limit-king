@@ -8,8 +8,8 @@ import {
   FiAlertCircle,
   FiChevronRight,
 } from "react-icons/fi";
-import { getAllOrders } from "../redux/Slices/orderSlice";
-import { fetchProducts } from "../redux/Slices/productSlice";
+import { getAllOrders } from "../redux/slices/orderSlice";
+import { fetchProducts } from "../redux/slices/productSlice";
 
 // Fancy icons import
 import { FaShoppingBag, FaBoxOpen, FaDollarSign } from "react-icons/fa";
