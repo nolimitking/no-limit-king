@@ -113,7 +113,7 @@ const Orders = () => {
         <p className="text-gray-600 mb-8">Track and manage your orders</p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {myOrders?.length > 0 ? (
+          {myOrders.length > 0 ? (
             myOrders.map((order) => (
               <div
                 key={order._id}
