@@ -2,15 +2,12 @@ import { motion } from "framer-motion";
 import {
   FaInstagram,
   FaFacebookF,
-  FaTwitter,
   FaTiktok,
-  FaYoutube,
   FaEnvelope,
   FaMapMarkerAlt,
   FaPhone,
   FaShieldAlt,
   FaTruck,
-  FaCreditCard,
   FaRecycle,
 } from "react-icons/fa";
 
