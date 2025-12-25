@@ -17,7 +17,6 @@ const Login = () => {
   const navigate = useNavigate();
 
   const { loading, error, success, user } = useSelector((state) => state.auth);
-  const { loading: cartLoading } = useSelector((state) => state.cart);
 
   // Update form value
   const handleChange = (e) => {
@@ -40,27 +39,27 @@ const Login = () => {
           const guestId = localStorage.getItem("guestId");
           if (guestId) {
             // Dispatch mergeCart to merge guest cart with user cart
-            const result = await dispatch(mergeCart());
+            const result = dispatch(mergeCart());
 
             if (mergeCart.fulfilled.match(result)) {
               // After successful merge, fetch the updated cart
-              await dispatch(getCart());
+              dispatch(getCart());
               toast.info("Your cart has been merged with your account");
             } else {
               // If merge fails, just fetch the user's cart
-              await dispatch(getCart());
+              dispatch(getCart());
             }
           } else {
             // No guest cart, just fetch the user's cart
-            await dispatch(getCart());
+            dispatch(getCart());
           }
 
           // Navigate to dashboard after cart operations
-          navigate("/user/dashboard");
+          navigate("/user/orders");
         } catch (err) {
           console.error("Cart merge error:", err);
           // Still navigate to dashboard even if cart merge fails
-          navigate("/user/dashboard");
+          navigate("/user/orders");
         }
       } else if (error) {
         toast.error(error);

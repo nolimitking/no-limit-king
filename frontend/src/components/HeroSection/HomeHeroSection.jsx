@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../redux/slices/cartSlice";
-import Kit from "../../assets/Kit.GIF";
+import Kit from "../../assets/Kit.gif";
 import { toast } from "react-toastify";
 
 const HomeHeroSection = () => {

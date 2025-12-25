@@ -49,7 +49,7 @@ const CheckoutSuccess = () => {
         {/* Navigation Buttons */}
         <div className="mt-12 space-y-4">
           <button
-            onClick={() => navigate("/user")}
+            onClick={() => navigate("/user/orders")}
             className="w-full bg-amber-500 text-black font-bold py-4 px-6 rounded-lg hover:bg-amber-400 transition duration-300 transform hover:-translate-y-1 hover:shadow-2xl"
           >
             Go To Your Dashboard
