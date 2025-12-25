@@ -7,11 +7,11 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 import Bag from "../assets/Bag.png";
-import Billionaire_Beard_conditioner from "../assets/Billionaire_Beard_conditioner.png";
-import Billionaire_Beard_straightener_brush from "../assets/Billionaire_Beard_straightener_brush.png";
-import Billionaire_Beard_Oil from "../assets/Billionaire_Beard_Oil.png";
-import Billionaire_Beard_Wash from "../assets/Billionaire_Beard_Wash.png";
-import Billionaire_Beard_Balm from "../assets/Billionaire_Beard_Balm.png";
+import Billionaire_Beard_conditioner from "../assets/billionaire_beard_conditioner.png";
+import Billionaire_Beard_straightener_brush from "../assets/billionaire_beard_straightener_brush.png";
+import Billionaire_Beard_Oil from "../assets/billionaire_beard_oil.png";
+import Billionaire_Beard_Wash from "../assets/billionaire_beard_wash.png";
+import Billionaire_Beard_Balm from "../assets/billionaire_beard_balm.png";
 
 // Product data with full descriptions
 const products = [
