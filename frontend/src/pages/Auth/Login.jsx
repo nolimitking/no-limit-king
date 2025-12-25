@@ -35,28 +35,30 @@ const Login = () => {
         try {
           toast.success(success);
 
-          // Check if there is a guest cart
-          const guestCart = JSON.parse(localStorage.getItem("guestId") || "[]");
-
-          if (guestCart.length > 0) {
-            // Merge guest cart with user cart
-            const result = await dispatch(mergeCart(guestCart)).unwrap();
+          // Check if there's a guest cart to merge
+          const guestId = localStorage.getItem("guestId");
+          if (guestId) {
+            // Dispatch mergeCart to merge guest cart with user cart
+            const result = dispatch(mergeCart());
 
             if (mergeCart.fulfilled.match(result)) {
+              // After successful merge, fetch the updated cart
+              dispatch(getCart());
               toast.info("Your cart has been merged with your account");
             } else {
-              toast.warn("Could not merge guest cart. Loading your cart...");
+              // If merge fails, just fetch the user's cart
+              dispatch(getCart());
             }
+          } else {
+            // No guest cart, just fetch the user's cart
+            dispatch(getCart());
           }
 
-          // Fetch user cart after merge or if no guest cart
-          dispatch(getCart());
-
-          // Navigate to orders/dashboard
+          // Navigate to dashboard after cart operations
           navigate("/user/orders");
         } catch (err) {
           console.error("Cart merge error:", err);
-          toast.error("Error merging cart. Proceeding to your orders.");
+          // Still navigate to dashboard even if cart merge fails
           navigate("/user/orders");
         }
       } else if (error) {
@@ -69,12 +71,14 @@ const Login = () => {
 
   return (
     <div className="relative min-h-screen bg-black flex items-center justify-center p-4 overflow-hidden">
+      {/* Animated Background Circles */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-20 left-80 w-16 h-16 border-2 border-amber-500/30 rounded-lg rotate-45"></div>
         <div className="absolute bottom-20 right-10 w-12 h-12 border-2 border-amber-500/20 rounded-full"></div>
         <div className="absolute top-1/3 right-20 w-8 h-8 border border-amber-500/30 rotate-12"></div>
       </div>
 
+      {/* Glassmorphism Login Card */}
       <div className="relative z-10 w-full max-w-md">
         <button
           onClick={() => navigate("/")}
@@ -82,7 +86,6 @@ const Login = () => {
         >
           Back To Home
         </button>
-
         <div className="bg-black/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-amber-500/20">
           <div className="text-center mb-10">
             <h1 className="text-3xl font-bold text-gray-200 mb-2">
@@ -92,6 +95,7 @@ const Login = () => {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Email */}
             <div>
               <label className="block text-sm font-medium text-gray-400 mb-2">
                 Email Address
@@ -112,6 +116,7 @@ const Login = () => {
               </div>
             </div>
 
+            {/* Password */}
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="block text-sm font-medium text-gray-400">
@@ -153,6 +158,7 @@ const Login = () => {
               {loading ? "Signing in..." : "Sign In"}
             </button>
 
+            {/* Sign up link */}
             <p className="text-center text-gray-400 text-sm">
               Don't have an account?{" "}
               <span
