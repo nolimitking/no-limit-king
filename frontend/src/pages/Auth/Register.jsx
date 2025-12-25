@@ -39,10 +39,9 @@ const Register = () => {
   };
 
   // Handle success + cart merge
-  // Fixed version:
   useEffect(() => {
-    const handleSuccessfulRegister = async () => {
-      if (success && user) {
+    if (success && user?._id) {
+      const handleSuccessfulRegister = async () => {
         try {
           toast.success("You are registered successfully");
 
@@ -50,8 +49,8 @@ const Register = () => {
 
           if (guestId) {
             try {
-              // AWAIT the mergeCart dispatch
-              await dispatch(mergeCart()).unwrap();
+              // Pass userId and guestId explicitly
+              await dispatch(mergeCart({ userId: user._id, guestId })).unwrap();
               toast.info("Your cart has been merged with your account");
             } catch (mergeError) {
               console.log("Cart merge failed, fetching user cart anyway");
@@ -59,8 +58,9 @@ const Register = () => {
           }
 
           // Always fetch cart after registration
-          await dispatch(getCart()).unwrap();
+          await dispatch(getCart({ userId: user._id })).unwrap();
 
+          // Reset form
           setFormData({
             name: "",
             email: "",
@@ -73,13 +73,14 @@ const Register = () => {
           console.error("Registration flow error:", err);
           navigate("/user/orders");
         }
-      } else if (error) {
-        toast.error(error);
-      }
-    };
+      };
 
-    handleSuccessfulRegister();
-  }, [success, error, user, dispatch, navigate]);
+      handleSuccessfulRegister();
+    } else if (error) {
+      toast.error(error);
+    }
+  }, [success, user, error, dispatch, navigate]);
+
   return (
     <div className="relative min-h-screen bg-black flex items-center justify-center p-4 overflow-hidden">
       {/* Animated Background */}
