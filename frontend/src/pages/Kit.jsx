@@ -7,7 +7,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 import Bag from "../assets/Bag.png";
-import Billionaire_Beard_conditionner from "../assets/Billionaire_Beard_conditionner.png";
+import Billionaire_Beard_conditioner from "../assets/Billionaire_Beard_conditioner.png";
 import Billionaire_Beard_straightener_brush from "../assets/Billionaire_Beard_straightener_brush.png";
 import Billionaire_Beard_Oil from "../assets/Billionaire_Beard_Oil.png";
 import Billionaire_Beard_Wash from "../assets/Billionaire_Beard_Wash.png";
@@ -25,7 +25,7 @@ const products = [
   {
     id: 2,
     name: "Billionaire Beard Conditioner",
-    image: Billionaire_Beard_conditionner,
+    image: Billionaire_Beard_conditioner,
     fullDescription:
       "Made with 100% natural ingredients to cleanse, soften, and deeply moisturize your beard. Enriched with Argan oil, Jojoba oil, aloe, green tea, and Provitamin B5, it leaves a luxurious scent with notes of sandalwood and champaca. After shampooing, massage through your beard, leave for 2–3 minutes, then rinse. For best results, pair with the Billionaire Beard Oil.",
   },
