@@ -38,7 +38,7 @@ const Login = () => {
           // Check if there is a guest cart
           const guestCart = JSON.parse(localStorage.getItem("guestId") || "[]");
 
-          if (guestCart) {
+          if (guestCart.length > 0) {
             // Merge guest cart with user cart
             const result = await dispatch(mergeCart(guestCart)).unwrap();
 
