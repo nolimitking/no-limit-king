@@ -36,11 +36,9 @@ const Login = () => {
           toast.success(success);
 
           // Check if there is a guest cart
-          const guestCart = JSON.parse(
-            localStorage.getItem("guestCart") || "[]"
-          );
+          const guestCart = JSON.parse(localStorage.getItem("guestId") || "[]");
 
-          if (guestCart.length > 0) {
+          if (guestCart) {
             // Merge guest cart with user cart
             const result = await dispatch(mergeCart(guestCart)).unwrap();
 
