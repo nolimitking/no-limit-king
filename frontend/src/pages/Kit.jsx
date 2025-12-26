@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectCoverflow, Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -55,6 +55,19 @@ const products = [
 const Kit = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Check if device is mobile
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const handleCloseOverlay = () => {
     setSelectedProduct(null);
@@ -72,12 +85,12 @@ const Kit = () => {
 
   return (
     <div
-      className="relative py-16 px-4 min-h-screen transition-all duration-500 ease-in-out"
+      className="relative py-8 md:py-16 px-4 min-h-screen transition-all duration-500 ease-in-out"
       style={{
         backgroundImage: `url(${getBackgroundImage()})`,
-        backgroundSize: "contain",
+        backgroundSize: "cover",
         backgroundPosition: "center",
-        backgroundAttachment: "fixed",
+        backgroundAttachment: isMobile ? "scroll" : "fixed",
         backgroundRepeat: "no-repeat",
       }}
     >
@@ -86,39 +99,77 @@ const Kit = () => {
 
       <div className="relative max-w-7xl mx-auto z-10">
         {/* Luxury Header */}
-        <div className="text-center sm:mb-8 mb-[-24px]">
-          <h1 className="text-4xl md:text-5xl font-semi-bold text-white mb-4">
+        <div className="text-center mb-4 md:mb-8">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semi-bold text-white mb-2 md:mb-4">
             Essential Collection
           </h1>
-          <p className="text-white/90 text-lg max-w-2xl mx-auto font-light">
+          <p className="text-white/90 text-sm sm:text-base md:text-lg max-w-2xl mx-auto font-light px-2">
             Discover our curated selection of premium essentials — swipe through
             the collection to explore each item.
           </p>
         </div>
 
         {/* Cover Flow Slider */}
-        <div className="relative">
+        <div className="relative pt-4 md:pt-0">
           <Swiper
             effect="coverflow"
             grabCursor={true}
             centeredSlides={true}
-            slidesPerView="auto"
+            slidesPerView={isMobile ? "auto" : "auto"}
+            initialSlide={0}
             loop={true}
             speed={800}
             onSlideChange={handleSlideChange}
             coverflowEffect={{
-              rotate: 0,
-              stretch: -60,
-              depth: 150,
-              modifier: 2,
+              rotate: isMobile ? 10 : 0,
+              stretch: isMobile ? -40 : -60,
+              depth: isMobile ? 100 : 150,
+              modifier: isMobile ? 1.5 : 2,
               slideShadows: false,
             }}
-            navigation={{
-              nextEl: ".swiper-button-next",
-              prevEl: ".swiper-button-prev",
+            breakpoints={{
+              320: {
+                slidesPerView: 1.2,
+                spaceBetween: 10,
+                coverflowEffect: {
+                  rotate: 10,
+                  stretch: -20,
+                  depth: 80,
+                  modifier: 1.2,
+                },
+              },
+              640: {
+                slidesPerView: 1.5,
+                spaceBetween: 20,
+                coverflowEffect: {
+                  rotate: 10,
+                  stretch: -30,
+                  depth: 100,
+                  modifier: 1.5,
+                },
+              },
+              768: {
+                slidesPerView: "auto",
+                spaceBetween: 30,
+                coverflowEffect: {
+                  rotate: 0,
+                  stretch: -60,
+                  depth: 150,
+                  modifier: 2,
+                },
+              },
             }}
+            navigation={
+              !isMobile
+                ? {
+                    nextEl: ".swiper-button-next",
+                    prevEl: ".swiper-button-prev",
+                  }
+                : false
+            }
             pagination={{
               clickable: true,
+              dynamicBullets: true,
             }}
             modules={[EffectCoverflow, Navigation, Pagination]}
             className="w-full pb-12"
@@ -126,21 +177,21 @@ const Kit = () => {
             {products.map((product) => (
               <SwiperSlide
                 key={product.id}
-                className="w-[300px] md:w-[340px] lg:w-[400px]"
+                className="w-[280px] sm:w-[300px] md:w-[340px] lg:w-[400px]"
               >
                 <div
                   className="relative cursor-pointer"
                   onClick={() => setSelectedProduct(product)}
                 >
                   {/* Image Container */}
-                  <div className="h-120 sm:h-150">
+                  <div className="h-80 sm:h-96 md:h-120 lg:h-150">
                     <img
                       src={product.image}
                       alt={product.name}
-                      className="w-full h-full object-contain p-6 transform transition-transform duration-300 hover:scale-105"
+                      className="w-full h-full object-contain p-4 sm:p-6 transform transition-transform duration-300 hover:scale-105"
                     />
-                    {/* Click hint overlay */}
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 inset-0 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
+                    {/* Click hint overlay - hidden on mobile for cleaner UI */}
+                    <div className="hidden sm:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 inset-0 opacity-0 hover:opacity-100 transition-opacity duration-300 items-end justify-center pb-6">
                       <span className="text-white text-sm font-light tracking-wider bg-black/50 backdrop-blur-sm px-4 py-2 rounded-full">
                         View Details
                       </span>
@@ -148,8 +199,8 @@ const Kit = () => {
                   </div>
 
                   {/* Product Info */}
-                  <div className="flex flex-col items-center justify-center p-6">
-                    <h3 className="text-lg font-normal text-white text-center tracking-tight">
+                  <div className="flex flex-col items-center justify-center p-4 sm:p-6">
+                    <h3 className="text-base sm:text-lg font-normal text-white text-center tracking-tight px-2">
                       {product.name}
                     </h3>
                   </div>
@@ -158,60 +209,64 @@ const Kit = () => {
             ))}
           </Swiper>
 
-          {/* Custom Navigation Buttons - Updated with mobile sizing */}
-          <div className="swiper-button-prev top-1/2 -translate-y-1/2 transition-all duration-200 hover:scale-110 [--swiper-navigation-sides-offset:18rem] [--swiper-navigation-color:white] scale-75 md:scale-100"></div>
-          <div className="swiper-button-next top-1/2 -translate-y-1/2 transition-all duration-200 hover:scale-110 [--swiper-navigation-sides-offset:18rem] [--swiper-navigation-color:white] scale-75 md:scale-100"></div>
+          {/* Custom Navigation Buttons - Only show on desktop */}
+          {!isMobile && (
+            <>
+              <div className="swiper-button-prev top-1/2 -translate-y-1/2 transition-all duration-200 hover:scale-110 [--swiper-navigation-sides-offset:4rem] md:[--swiper-navigation-sides-offset:8rem] lg:[--swiper-navigation-sides-offset:18rem] [--swiper-navigation-color:white] scale-75 md:scale-90 lg:scale-100"></div>
+              <div className="swiper-button-next top-1/2 -translate-y-1/2 transition-all duration-200 hover:scale-110 [--swiper-navigation-sides-offset:4rem] md:[--swiper-navigation-sides-offset:8rem] lg:[--swiper-navigation-sides-offset:18rem] [--swiper-navigation-color:white] scale-75 md:scale-90 lg:scale-100"></div>
+            </>
+          )}
 
           {/* Custom Pagination */}
-          <div className="swiper-pagination bottom-6"></div>
+          <div className="swiper-pagination bottom-4 md:bottom-6"></div>
         </div>
       </div>
 
       {/* Full Screen Overlay Modal */}
       {selectedProduct && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8 bg-black/95 backdrop-blur-sm transition-all duration-300"
+          className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-8 bg-black/95 backdrop-blur-sm transition-all duration-300"
           onClick={handleCloseOverlay}
         >
           <div
-            className="relative w-full max-w-4xl max-h-[90vh] overflow-hidden rounded-2xl bg-white shadow-2xl transform transition-all duration-500 scale-95 opacity-0"
+            className="relative w-full max-w-4xl max-h-[90vh] overflow-hidden rounded-lg md:rounded-2xl bg-white shadow-2xl transform transition-all duration-500 scale-95 opacity-0"
             onClick={(e) => e.stopPropagation()}
             style={{ animation: "modalEnter 0.4s ease-out forwards" }}
           >
             {/* Close Button */}
             <button
               onClick={handleCloseOverlay}
-              className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center text-gray-500 hover:text-gray-900 hover:bg-white/20 transition-all duration-300 group"
+              className="absolute top-2 right-2 md:top-4 md:right-4 z-10 w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center text-gray-500 hover:text-gray-900 hover:bg-white/20 transition-all duration-300 group"
             >
-              <span className="text-2xl group-hover:rotate-90 transition-transform duration-300">
+              <span className="text-xl md:text-2xl group-hover:rotate-90 transition-transform duration-300">
                 ×
               </span>
             </button>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 h-full">
+            <div className="flex flex-col lg:grid lg:grid-cols-2 h-full">
               {/* Image Section */}
-              <div className="relative h-64 lg:h-full bg-gradient-to-br from-gray-50 to-gray-100">
+              <div className="relative h-48 sm:h-56 md:h-64 lg:h-full bg-gradient-to-br from-gray-50 to-gray-100">
                 <img
                   src={selectedProduct.image}
                   alt={selectedProduct.name}
-                  className="w-full h-full object-contain p-8 lg:p-12"
+                  className="w-full h-full object-contain p-4 sm:p-6 md:p-8 lg:p-12"
                 />
               </div>
 
               {/* Content Section */}
-              <div className="p-6 md:p-8 lg:p-12 overflow-y-auto">
-                <div className="mb-6">
-                  <h2 className="text-2xl md:text-3xl font-light text-gray-900 mb-2 tracking-tight">
+              <div className="p-4 sm:p-6 md:p-8 lg:p-12 overflow-y-auto">
+                <div className="mb-4 md:mb-6">
+                  <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-light text-gray-900 mb-2 tracking-tight">
                     {selectedProduct.name}
                   </h2>
-                  <p className="text-gray-600 text-lg font-light italic mb-4">
+                  <p className="text-gray-600 text-sm sm:text-base md:text-lg font-light italic mb-2 md:mb-4">
                     {selectedProduct.title}
                   </p>
-                  <div className="w-16 h-0.5 bg-gradient-to-r from-amber-400 to-transparent mb-6"></div>
+                  <div className="w-12 md:w-16 h-0.5 bg-gradient-to-r from-amber-400 to-transparent mb-4 md:mb-6"></div>
                 </div>
 
-                <div className="prose prose-lg max-w-none">
-                  <p className="text-gray-700 text-base md:text-lg leading-relaxed font-light whitespace-pre-line">
+                <div className="prose prose-sm sm:prose-base md:prose-lg max-w-none">
+                  <p className="text-gray-700 text-sm sm:text-base md:text-lg leading-relaxed font-light whitespace-pre-line">
                     {selectedProduct.fullDescription}
                   </p>
                 </div>
@@ -236,6 +291,9 @@ const Kit = () => {
         
         .swiper-pagination-bullet {
           background-color: rgba(255, 255, 255, 0.5) !important;
+          width: 8px !important;
+          height: 8px !important;
+          margin: 0 4px !important;
         }
         
         .swiper-pagination-bullet-active {
@@ -243,40 +301,41 @@ const Kit = () => {
           transform: scale(1.2);
         }
         
+        /* Improve touch scrolling on mobile */
+        .swiper-slide {
+          -webkit-tap-highlight-color: transparent;
+          tap-highlight-color: transparent;
+        }
+        
+        /* Prevent horizontal scroll on mobile */
+        .swiper-container {
+          overflow: hidden;
+        }
+        
         /* Custom button sizes for mobile */
         @media (max-width: 768px) {
           .swiper-button-prev,
           .swiper-button-next {
-            width: 40px !important;
-            height: 40px !important;
+            display: none !important;
           }
           
-          .swiper-button-prev:after,
-          .swiper-button-next:after {
-            font-size: 20px !important;
+          .swiper {
+            padding-bottom: 24px !important;
           }
         }
         
-        /* For very small screens */
-        @media (max-width: 640px) {
-          .swiper-button-prev,
-          .swiper-button-next {
-            width: 36px !important;
-            height: 36px !important;
+        /* Modal scroll improvements */
+        @media (max-height: 600px) {
+          .fixed {
+            align-items: flex-start;
+            padding-top: 20px;
           }
-          
-          .swiper-button-prev:after,
-          .swiper-button-next:after {
-            font-size: 18px !important;
-          }
-          
-          /* Adjust side offset for mobile */
-          .swiper-button-prev {
-            left: -12px !important;
-          }
-          
-          .swiper-button-next {
-            right: -12px !important;
+        }
+        
+        /* Fix for iOS Safari */
+        @supports (-webkit-touch-callout: none) {
+          .min-h-screen {
+            min-height: -webkit-fill-available;
           }
         }
       `}</style>

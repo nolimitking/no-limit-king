@@ -7,9 +7,6 @@ import { toast } from "react-toastify";
 const HomeHeroSection = () => {
   const dispatch = useDispatch();
 
-  // Assuming you have a product ID for this kit
-  const productId = "premium-beard-kit-001";
-
   const handleAddToCart = () => {
     dispatch(
       addToCart({
@@ -18,7 +15,7 @@ const HomeHeroSection = () => {
       })
     ).then((result) => {
       if (result.meta.requestStatus === "fulfilled") {
-        toast.success("Added to cart successfully!");
+        toast.success("Added to cart successfully!", { autoClose: 1000 });
       } else {
         toast.error("Failed to add to cart");
       }

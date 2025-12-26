@@ -1,8 +1,28 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Kit from "../../assets/Kit.png";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../redux/slices/cartSlice";
+import { toast } from "react-toastify";
 
 const CTAHome = () => {
+  const dispatch = useDispatch();
+
+  const handleAddToCart = () => {
+    dispatch(
+      addToCart({
+        productId: "69446cec71879644a567fb35",
+        quantity: 1,
+      })
+    ).then((result) => {
+      if (result.meta.requestStatus === "fulfilled") {
+        toast.success("Added to cart successfully!", { autoClose: 1000 });
+      } else {
+        toast.error("Failed to add to cart");
+      }
+    });
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -63,7 +83,10 @@ const CTAHome = () => {
                 whileTap={{ scale: 0.98 }}
                 className="pt-2 sm:pt-4"
               >
-                <button className="group relative w-full sm:w-auto">
+                <button
+                  onClick={handleAddToCart}
+                  className="group relative w-full sm:w-auto"
+                >
                   {/* Button content */}
                   <div className="relative px-4 sm:px-6 py-3 sm:py-4 bg-black rounded-lg flex items-center justify-center border border-gray-800 transition-colors duration-100 hover:border-amber-500/30">
                     <span className="text-white font-medium text-xs sm:text-sm tracking-wider uppercase">
