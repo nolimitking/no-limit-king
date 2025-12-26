@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import logo from "../assets/Logo_And_Name.png";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/slices/authSlice";
@@ -20,17 +20,12 @@ import CartSidebar from "./CartSidebar";
 const Navbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const { user } = useSelector((state) => state.auth);
   const { items } = useSelector((state) => state.cart);
-
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // mobile menu
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false); // desktop user menu
 
-  const userMenuRef = useRef(null);
-
-  // Prevent body scroll (mobile menu OR cart)
+  // Prevent body scroll when mobile menu OR cart is open
   useEffect(() => {
     if (isMenuOpen || isCartOpen) {
       document.body.style.overflow = "hidden";
@@ -43,33 +38,14 @@ const Navbar = () => {
     };
   }, [isMenuOpen, isCartOpen]);
 
-  // Close desktop user menu on click outside
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (userMenuRef.current && !userMenuRef.current.contains(e.target)) {
-        setIsUserMenuOpen(false);
-      }
-    };
-
-    if (isUserMenuOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isUserMenuOpen]);
-
   const handleLogout = () => {
     dispatch(logout());
     navigate("/");
-    setIsUserMenuOpen(false);
     setIsMenuOpen(false);
   };
 
   const handleDashboardNavigation = () => {
     navigate("/user/orders");
-    setIsUserMenuOpen(false);
     setIsMenuOpen(false);
   };
 
@@ -99,7 +75,7 @@ const Navbar = () => {
             />
           </div>
 
-          {/* ================= DESKTOP MENU ================= */}
+          {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-2 border border-amber-500/40 shadow-2xl font-semibold rounded-xl px-2 py-2">
             {menuItems.map((item) => {
               const Icon = item.icon;
@@ -122,8 +98,8 @@ const Navbar = () => {
             })}
           </div>
 
-          {/* ================= DESKTOP USER ACTIONS ================= */}
-          <div className="hidden md:flex items-center gap-4 relative">
+          {/* Desktop User Actions */}
+          <div className="hidden md:flex items-center gap-4">
             {/* Cart */}
             <div className="relative">
               <ShoppingBag
@@ -138,77 +114,56 @@ const Navbar = () => {
               )}
             </div>
 
-            {/* User (CLICKABLE) */}
-            <div className="relative" ref={userMenuRef}>
-              <div
-                onClick={() => setIsUserMenuOpen((prev) => !prev)}
-                className="cursor-pointer"
-              >
-                {user ? (
-                  <span className="font-bold text-black w-5 h-5 p-4 flex justify-center items-center text-xs rounded-full bg-amber-500 hover:bg-amber-600 transition-all">
-                    {user.name[0].toUpperCase()}
-                  </span>
-                ) : (
-                  <User
-                    className="text-amber-500 hover:text-amber-600"
-                    size={20}
-                  />
-                )}
-              </div>
-
-              {isUserMenuOpen && (
-                <div className="absolute top-full right-0 pt-2 z-20">
-                  <div className="flex flex-col bg-amber-500/80 gap-3 p-4 rounded-lg shadow-md w-48">
-                    {user ? (
-                      <>
-                        <div
-                          onClick={handleDashboardNavigation}
-                          className="hover:text-amber-500 text-black cursor-pointer py-2 px-2 rounded-lg hover:bg-black flex items-center gap-2"
-                        >
-                          <User size={16} />
-                          <span>Dashboard</span>
-                        </div>
-
-                        <div
-                          onClick={handleLogout}
-                          className="hover:text-amber-500 text-black cursor-pointer py-2 px-2 rounded-lg hover:bg-black flex items-center gap-2"
-                        >
-                          <LogOut size={16} />
-                          <span>Logout</span>
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <div
-                          onClick={() => {
-                            navigate("/login");
-                            setIsUserMenuOpen(false);
-                          }}
-                          className="hover:text-amber-500 text-black cursor-pointer py-2 px-2 rounded-lg hover:bg-black flex items-center gap-2"
-                        >
-                          <LogIn size={16} />
-                          <span>Login</span>
-                        </div>
-
-                        <div
-                          onClick={() => {
-                            navigate("/register");
-                            setIsUserMenuOpen(false);
-                          }}
-                          className="hover:text-amber-500 text-black cursor-pointer py-2 px-2 rounded-lg hover:bg-black flex items-center gap-2"
-                        >
-                          <UserPlus size={16} />
-                          <span>Register</span>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </div>
+            {/* User */}
+            <div className="flex items-center gap-2 cursor-pointer group relative">
+              {user ? (
+                <span
+                  onClick={handleDashboardNavigation}
+                  className="font-bold text-black w-5 h-5 p-4 flex justify-center items-center text-xs rounded-full bg-amber-500 hover:bg-amber-600 transition-all cursor-pointer"
+                >
+                  {user.name[0].toUpperCase()}
+                </span>
+              ) : (
+                <User
+                  className="text-amber-500 hover:text-amber-600"
+                  size={20}
+                />
               )}
+
+              <div className="absolute top-full right-0 pt-2 z-20 hidden group-hover:block">
+                <div className="flex flex-col bg-amber-500/80 gap-3 p-4 rounded-lg shadow-md w-48">
+                  {user ? (
+                    <div
+                      onClick={handleLogout}
+                      className="hover:text-amber-500 text-black cursor-pointer py-2 px-2 rounded-lg hover:bg-black flex items-center gap-2"
+                    >
+                      <LogOut size={16} />
+                      <span>Logout</span>
+                    </div>
+                  ) : (
+                    <>
+                      <div
+                        onClick={() => navigate("/login")}
+                        className="hover:text-amber-500 text-black cursor-pointer py-2 px-2 rounded-lg hover:bg-black flex items-center gap-2"
+                      >
+                        <LogIn size={16} />
+                        <span>Login</span>
+                      </div>
+                      <div
+                        onClick={() => navigate("/register")}
+                        className="hover:text-amber-500 hover:bg-black py-2 px-2 rounded-lg text-black cursor-pointer flex items-center gap-2"
+                      >
+                        <UserPlus size={16} />
+                        <span>Register</span>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* ================= MOBILE HEADER (UNCHANGED) ================= */}
+          {/* Mobile Header */}
           <div
             className={`md:hidden flex items-center gap-4 z-50 ${
               isCartOpen ? "hidden" : ""
@@ -242,7 +197,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* ================= MOBILE MENU (UNCHANGED) ================= */}
+        {/* Mobile Menu */}
         {isMenuOpen && (
           <>
             <div
@@ -252,6 +207,7 @@ const Navbar = () => {
 
             <div className="md:hidden fixed top-10 left-0 right-0 bottom-0 z-40 pt-20 overflow-y-auto">
               <div className="container mx-auto sm:px-8 px-4">
+                {/* Mobile Nav */}
                 <div className="flex flex-col gap-2 border border-amber-500/40 shadow-2xl font-semibold rounded-xl p-2 mb-4 bg-black">
                   {menuItems.map((item) => {
                     const Icon = item.icon;
@@ -262,11 +218,11 @@ const Navbar = () => {
                         onClick={() => setIsMenuOpen(false)}
                         className={({ isActive }) =>
                           `cursor-pointer px-4 py-3 rounded-lg transition-colors duration-200 
-                          flex items-center justify-center gap-2 text-center ${
-                            isActive
-                              ? "bg-amber-500 text-black"
-                              : "hover:bg-black hover:text-amber-600 text-amber-500"
-                          }`
+                           flex items-center justify-center gap-2 text-center ${
+                             isActive
+                               ? "bg-amber-500 text-black"
+                               : "hover:bg-black hover:text-amber-600 text-amber-500"
+                           }`
                         }
                       >
                         <Icon size={18} />
@@ -276,13 +232,15 @@ const Navbar = () => {
                   })}
                 </div>
 
+                {/* Mobile User Actions */}
                 <div className="border border-amber-500/40 shadow-2xl font-semibold rounded-xl p-4 bg-black">
                   {user ? (
                     <>
                       <div
                         onClick={handleDashboardNavigation}
                         className="cursor-pointer px-4 py-3 rounded-lg transition-colors duration-200 
-                        flex items-center justify-center gap-2 text-amber-500 hover:bg-black hover:text-amber-600 mb-2"
+                                   flex items-center justify-center gap-2 text-amber-500 
+                                   hover:bg-black hover:text-amber-600 mb-2"
                       >
                         <User size={18} />
                         <span>Dashboard</span>
@@ -291,7 +249,7 @@ const Navbar = () => {
                       <div
                         onClick={handleLogout}
                         className="cursor-pointer px-4 py-3 rounded-lg transition-colors duration-200 
-                        flex items-center justify-center gap-2 bg-amber-500 text-black hover:bg-amber-600"
+                                   flex items-center justify-center gap-2 bg-amber-500 text-black hover:bg-amber-600"
                       >
                         <LogOut size={18} />
                         <span>Logout</span>
@@ -305,7 +263,8 @@ const Navbar = () => {
                           setIsMenuOpen(false);
                         }}
                         className="cursor-pointer px-4 py-3 rounded-lg transition-colors duration-200 
-                        flex items-center justify-center gap-2 text-amber-500 hover:bg-black hover:text-amber-600 mb-2"
+                                   flex items-center justify-center gap-2 text-amber-500 
+                                   hover:bg-black hover:text-amber-600 mb-2"
                       >
                         <LogIn size={18} />
                         <span>Login</span>
@@ -317,7 +276,7 @@ const Navbar = () => {
                           setIsMenuOpen(false);
                         }}
                         className="cursor-pointer px-4 py-3 rounded-lg transition-colors duration-200 
-                        flex items-center justify-center gap-2 bg-amber-500 text-black hover:bg-amber-600"
+                                   flex items-center justify-center gap-2 bg-amber-500 text-black hover:bg-amber-600"
                       >
                         <UserPlus size={18} />
                         <span>Register</span>
