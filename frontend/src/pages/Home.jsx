@@ -3,6 +3,7 @@ import HomeHeroSection from "../components/HeroSection/HomeHeroSection";
 import HowItWorks from "../components/HowItWork";
 import Kit from "./Kit";
 import Owner from "../components/Owner";
+import Gallery from "../components/Gallery";
 
 const Home = () => {
   return (
@@ -10,6 +11,7 @@ const Home = () => {
       <HomeHeroSection />
       <HowItWorks />
       <Owner />
+      <Gallery />
       <Kit />
       <CTAHome />
     </div>
