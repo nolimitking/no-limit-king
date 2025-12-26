@@ -225,7 +225,7 @@ const Kit = () => {
       {/* Full Screen Overlay Modal */}
       {selectedProduct && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-8 bg-black/95 backdrop-blur-sm transition-all duration-300"
+          className="fixed inset-0 z-50 flex min-h-screen items-center justify-center p-2 sm:p-4 md:p-8 bg-black/95 backdrop-blur-sm transition-all duration-300"
           onClick={handleCloseOverlay}
         >
           <div
