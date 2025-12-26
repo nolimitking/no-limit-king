@@ -24,14 +24,6 @@ app.use(express.json());
 app.use(cors());
 connectDB();
 
-// --- Redirect non-www to www ---
-app.use((req, res, next) => {
-  if (req.hostname === "nolimitking.com") {
-    return res.redirect(301, "https://www.nolimitking.com" + req.originalUrl);
-  }
-  next();
-});
-
 // API Routes
 app.use("/api/cart", cartRoutes);
 app.use("/api/products", productRoutes);
