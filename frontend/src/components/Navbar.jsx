@@ -38,12 +38,14 @@ const Navbar = () => {
     };
   }, [isMenuOpen, isCartOpen]);
 
+  // Clear localStorage and head the user to the home page
   const handleLogout = () => {
     dispatch(logout());
     navigate("/");
     setIsMenuOpen(false);
   };
 
+  // Handle dynamic routes
   const handleDashboardNavigation = () => {
     navigate("/user/orders");
     setIsMenuOpen(false);
@@ -59,6 +61,7 @@ const Navbar = () => {
 
   return (
     <nav>
+      {/* Cart Sidebar Component */}
       <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
 
       <div className="container mx-auto sm:px-8 px-4 py-3 relative">
@@ -98,9 +101,9 @@ const Navbar = () => {
             })}
           </div>
 
-          {/* Desktop User Actions */}
+          {/* User Actions */}
           <div className="hidden md:flex items-center gap-4">
-            {/* Cart */}
+            {/* Cart Icon with Badge */}
             <div className="relative">
               <ShoppingBag
                 onClick={() => setIsCartOpen(true)}
@@ -114,7 +117,7 @@ const Navbar = () => {
               )}
             </div>
 
-            {/* User */}
+            {/* User Menu */}
             <div className="flex items-center gap-2 cursor-pointer group relative">
               {user ? (
                 <span
@@ -129,7 +132,6 @@ const Navbar = () => {
                   size={20}
                 />
               )}
-
               <div className="absolute top-full right-0 pt-2 z-20 hidden group-hover:block">
                 <div className="flex flex-col bg-amber-500/80 gap-3 p-4 rounded-lg shadow-md w-48">
                   {user ? (
@@ -163,12 +165,13 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* Mobile Header */}
+          {/* Mobile Menu Button */}
           <div
             className={`md:hidden flex items-center gap-4 z-50 ${
               isCartOpen ? "hidden" : ""
             }`}
           >
+            {/* Cart Icon with Badge for Mobile */}
             <div className="relative">
               <ShoppingBag
                 onClick={() => setIsCartOpen(true)}
@@ -182,32 +185,41 @@ const Navbar = () => {
               )}
             </div>
 
+            {/* Show user badge in mobile header when logged in */}
             {user && (
-              <span className="font-bold text-black w-5 h-5 p-4 flex justify-center items-center text-xs rounded-full bg-amber-500 hover:bg-amber-600 transition-all cursor-pointer">
+              <span
+                onClick={handleDashboardNavigation}
+                className="font-bold text-black w-5 h-5 p-4 flex justify-center items-center text-xs rounded-full bg-amber-500 hover:bg-amber-600 transition-all cursor-pointer"
+              >
                 {user.name[0].toUpperCase()}
               </span>
             )}
-
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2 rounded-lg text-amber-500 hover:bg-gray-100 transition-colors duration-200"
+              className="p-2 rounded-lg text-amber-500 hover:bg-gray-100 transition-colors duration-200 z-50"
             >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {isMenuOpen ? (
+                <X size={24} className="text-amber-500" />
+              ) : (
+                <Menu size={24} />
+              )}
             </button>
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu Overlay */}
         {isMenuOpen && (
           <>
+            {/* Backdrop overlay - prevents interaction with page behind */}
             <div
               className="fixed inset-0 bg-black z-40 md:hidden"
               onClick={() => setIsMenuOpen(false)}
             />
 
+            {/* Mobile Menu Content */}
             <div className="md:hidden fixed top-10 left-0 right-0 bottom-0 z-40 pt-20 overflow-y-auto">
               <div className="container mx-auto sm:px-8 px-4">
-                {/* Mobile Nav */}
+                {/* Mobile Navigation Menu */}
                 <div className="flex flex-col gap-2 border border-amber-500/40 shadow-2xl font-semibold rounded-xl p-2 mb-4 bg-black">
                   {menuItems.map((item) => {
                     const Icon = item.icon;
@@ -217,12 +229,11 @@ const Navbar = () => {
                         to={item.path}
                         onClick={() => setIsMenuOpen(false)}
                         className={({ isActive }) =>
-                          `cursor-pointer px-4 py-3 rounded-lg transition-colors duration-200 
-                           flex items-center justify-center gap-2 text-center ${
-                             isActive
-                               ? "bg-amber-500 text-black"
-                               : "hover:bg-black hover:text-amber-600 text-amber-500"
-                           }`
+                          `cursor-pointer px-4 py-3 rounded-lg transition-colors duration-200 flex items-center gap-2 ${
+                            isActive
+                              ? "bg-amber-500 text-black"
+                              : "hover:bg-black hover:text-amber-600 text-amber-500"
+                          }`
                         }
                       >
                         <Icon size={18} />
@@ -236,20 +247,34 @@ const Navbar = () => {
                 <div className="border border-amber-500/40 shadow-2xl font-semibold rounded-xl p-4 bg-black">
                   {user ? (
                     <>
+                      {/* User Info */}
+                      <div className="flex items-center gap-3 mb-4">
+                        <span className="font-bold text-black w-8 h-8 p-5 flex justify-center items-center text-sm rounded-full bg-amber-500">
+                          {user.name[0].toUpperCase()}
+                        </span>
+                        <div>
+                          <p className="text-amber-500 font-bold">
+                            {user.name}
+                          </p>
+                          <p className="text-amber-500/80 text-sm">
+                            {user.email}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Dashboard Button */}
                       <div
                         onClick={handleDashboardNavigation}
-                        className="cursor-pointer px-4 py-3 rounded-lg transition-colors duration-200 
-                                   flex items-center justify-center gap-2 text-amber-500 
-                                   hover:bg-black hover:text-amber-600 mb-2"
+                        className="cursor-pointer px-4 py-3 rounded-lg transition-colors duration-200 flex items-center gap-2 text-amber-500 hover:bg-black hover:text-amber-600 mb-2"
                       >
                         <User size={18} />
                         <span>Dashboard</span>
                       </div>
 
+                      {/* Logout Button */}
                       <div
                         onClick={handleLogout}
-                        className="cursor-pointer px-4 py-3 rounded-lg transition-colors duration-200 
-                                   flex items-center justify-center gap-2 bg-amber-500 text-black hover:bg-amber-600"
+                        className="cursor-pointer px-4 py-3 rounded-lg transition-colors duration-200 flex items-center gap-2 bg-amber-500 text-black hover:bg-amber-600"
                       >
                         <LogOut size={18} />
                         <span>Logout</span>
@@ -257,26 +282,25 @@ const Navbar = () => {
                     </>
                   ) : (
                     <>
+                      {/* Login Button */}
                       <div
                         onClick={() => {
                           navigate("/login");
                           setIsMenuOpen(false);
                         }}
-                        className="cursor-pointer px-4 py-3 rounded-lg transition-colors duration-200 
-                                   flex items-center justify-center gap-2 text-amber-500 
-                                   hover:bg-black hover:text-amber-600 mb-2"
+                        className="cursor-pointer px-4 py-3 rounded-lg transition-colors duration-200 flex items-center gap-2 text-amber-500 hover:bg-black hover:text-amber-600 mb-2"
                       >
                         <LogIn size={18} />
                         <span>Login</span>
                       </div>
 
+                      {/* Register Button */}
                       <div
                         onClick={() => {
                           navigate("/register");
                           setIsMenuOpen(false);
                         }}
-                        className="cursor-pointer px-4 py-3 rounded-lg transition-colors duration-200 
-                                   flex items-center justify-center gap-2 bg-amber-500 text-black hover:bg-amber-600"
+                        className="cursor-pointer px-4 py-3 rounded-lg transition-colors duration-200 flex items-center gap-2 bg-amber-500 text-black hover:bg-amber-600"
                       >
                         <UserPlus size={18} />
                         <span>Register</span>
