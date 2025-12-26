@@ -352,10 +352,6 @@ const Navbar = () => {
             <div
               className="md:hidden fixed inset-0 bg-black z-40"
               onClick={() => setIsMenuOpen(false)}
-              style={{
-                willChange: "opacity",
-                animation: "fadeIn 0.2s ease-out forwards",
-              }}
             />
 
             {/* Mobile menu container */}
