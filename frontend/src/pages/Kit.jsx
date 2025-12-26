@@ -94,8 +94,15 @@ const Kit = () => {
         backgroundRepeat: "no-repeat",
       }}
     >
-      {/* Dark overlay for better readability */}
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-[1px]"></div>
+      {/* Background blur overlay - ONLY blurs the background image */}
+      <div
+        className="absolute inset-0"
+        style={{
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          backgroundColor: "rgba(0, 0, 0, 0.4)", // Optional: keeps the dark overlay
+        }}
+      ></div>
 
       <div className="relative max-w-7xl mx-auto z-10">
         {/* Luxury Header */}
