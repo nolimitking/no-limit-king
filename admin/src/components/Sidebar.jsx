@@ -33,7 +33,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
     {
       label: "Back Home",
       icon: FiHome,
-      path: "http://localhost:5173",
+      path: "https://www.nolimitking.com",
       external: true,
     },
   ];
