@@ -72,14 +72,14 @@ const Owner = () => {
             {/* Headline */}
             <h2 className="text-5xl lg:text-6xl font-bold mb-8 tracking-tight">
               <span className="bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 bg-clip-text text-transparent">
-                No Limit Bear
+                Billionaire Beard
               </span>
             </h2>
 
             {/* Description */}
             <div className="space-y-6">
               <p className="text-gray-300 text-lg leading-relaxed font-light">
-                No Limit Bear is built on{" "}
+                Billionaire Beard is built on{" "}
                 <span className="font-semibold text-amber-400">
                   discipline, ambition
                 </span>
