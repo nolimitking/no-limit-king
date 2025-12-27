@@ -163,20 +163,19 @@ const OrderDetails = () => {
                 <span className="font-semibold">Total Price:</span> $
                 {orderDetails.totalPrice}
               </div>
-            </div>
-
-            {/* Right */}
-            <div className="space-y-4">
               <div className="bg-gray-50 p-4 rounded-lg flex justify-between items-center">
                 <span className="font-semibold">Payment Status:</span>
                 <StatusBadge status={orderDetails.paymentStatus} />
               </div>
 
-              <div className="bg-gray-50 p-4 rounded-lg flex justify-between items-center">
-                <span className="font-semibold">Shipping Status:</span>
-                <StatusBadge status={orderDetails.shippingStatus} />
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <span className="font-semibold">Created:</span>{" "}
+                {new Date(orderDetails.createdAt).toLocaleString()}
               </div>
+            </div>
 
+            {/* Right */}
+            <div className="space-y-4">
               {/* Admin Status Update */}
               <div className="bg-gray-50 p-4 rounded-lg space-y-3">
                 <label className="block text-sm font-semibold text-gray-700">
@@ -202,10 +201,36 @@ const OrderDetails = () => {
                   {updatingStatus ? "Updating..." : "Update Status"}
                 </button>
               </div>
-
+              <div className="bg-gray-50 p-4 rounded-lg flex justify-between items-center">
+                <span className="font-semibold">Shipping Status:</span>
+                <StatusBadge status={orderDetails.shippingStatus} />
+              </div>
               <div className="bg-gray-50 p-4 rounded-lg">
-                <span className="font-semibold">Created:</span>{" "}
-                {new Date(orderDetails.createdAt).toLocaleString()}
+                <p>
+                  {" "}
+                  <span className="font-semibold">Name:</span>{" "}
+                  {orderDetails.shippingAddress.name}
+                </p>
+                <p>
+                  <span className="font-semibold">Address:</span>{" "}
+                  {orderDetails.shippingAddress.address}
+                </p>
+                <p>
+                  <span className="font-semibold">City:</span>{" "}
+                  {orderDetails.shippingAddress.city}
+                </p>
+                <p>
+                  <span className="font-semibold">State</span>{" "}
+                  {orderDetails.shippingAddress.state}
+                </p>
+                <p>
+                  <span className="font-semibold">Postal Code:</span>{" "}
+                  {orderDetails.shippingAddress.postalCode}
+                </p>
+                <p>
+                  <span className="font-semibold">Country:</span>{" "}
+                  {orderDetails.shippingAddress.country}
+                </p>
               </div>
             </div>
           </div>

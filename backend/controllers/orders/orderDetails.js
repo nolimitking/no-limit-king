@@ -4,7 +4,10 @@ const orderDetails = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const order = await Order.findById(id).populate("user", "email name");
+    const order = await Order.findById(id).populate(
+      "user",
+      "email name shippingAddress"
+    );
 
     if (!order) {
       return res.status(400).json({ message: "Order details not found" });
