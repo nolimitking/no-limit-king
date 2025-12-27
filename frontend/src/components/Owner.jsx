@@ -65,7 +65,7 @@ const Owner = () => {
             <div className="inline-flex items-center gap-2 mb-8">
               <div className="w-12 h-px bg-gradient-to-r from-amber-500 to-transparent" />
               <span className="text-amber-500/70 text-sm font-semibold tracking-widest uppercase">
-                Vision & Philosophy
+                The Billionaire Beard Philosophy
               </span>
             </div>
 
@@ -79,14 +79,14 @@ const Owner = () => {
             {/* Description */}
             <div className="space-y-6">
               <p className="text-gray-300 text-lg leading-relaxed font-light">
-                Billionaire Beard is built on{" "}
+                At its core, Billionaire Beard is more than just a brand{" "}
                 <span className="font-semibold text-amber-400">
-                  discipline, ambition
-                </span>
-                , and the relentless mindset of pushing beyond perceived
-                boundaries. More than a brand, it represents an unwavering
-                commitment to consistency, hard work, and the courage to stand
-                apart.
+                  - it's a mindset.
+                </span>{" "}
+                It's about embracing a lifestyle that is defined by discipline,
+                ambition, and a willingness to challenge the O status quo. Those
+                who embody the Billionaire Beard philosophy are committed to
+                consistently pushing themselves to new heights.
               </p>
             </div>
           </div>
