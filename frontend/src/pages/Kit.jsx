@@ -10,7 +10,7 @@ import "swiper/css/pagination";
 const products = [
   {
     id: 1,
-    name: "Gift Bag – No Limit King Billionaire Beard kit",
+    name: "Gift Bag – Billionaire Beard kit",
     image: "/assets/bag.png",
     fullDescription:
       "A premium, stylish gift bag crafted to match the luxury of the No Limit King Billionaire Beard Kit. Durable, sleek, and designed for unforgettable gifting — the perfect finishing touch for the ultimate beard-care experience.",
