@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import {
   fetchProductDetails,
   clearError,
   clearProduct,
+  deleteProduct,
 } from "../../redux/slices/productSlice";
 import {
   FaArrowLeft,
@@ -36,13 +37,17 @@ const ProductDetails = () => {
   const userInfo = JSON.parse(localStorage.getItem("userInfo") || "null");
   const isAdmin = userInfo?.role === "admin";
 
-  // Fetch product details on mount
+  /* =========================
+     FETCH PRODUCT
+  ========================= */
   useEffect(() => {
     if (id) dispatch(fetchProductDetails(id));
     return () => dispatch(clearProduct());
   }, [dispatch, id]);
 
-  // Handle errors
+  /* =========================
+     HANDLE ERRORS
+  ========================= */
   useEffect(() => {
     if (error) {
       showNotification(error, "error");
@@ -50,6 +55,9 @@ const ProductDetails = () => {
     }
   }, [error, dispatch]);
 
+  /* =========================
+     NOTIFICATION
+  ========================= */
   const showNotification = (message, type = "success") => {
     setNotification({ show: true, message, type });
     setTimeout(() => {
@@ -57,16 +65,32 @@ const ProductDetails = () => {
     }, 3000);
   };
 
+  /* =========================
+     ACTIONS
+  ========================= */
   const handleEditClick = () => {
     navigate(`/admin/product/edit/${id}`);
   };
 
   const handleDeleteConfirm = () => {
-    showNotification("Delete functionality not implemented", "error");
-    setOpenDeleteDialog(false);
+    dispatch(deleteProduct(id))
+      .unwrap()
+      .then(() => {
+        showNotification("Product deleted successfully", "success");
+        setOpenDeleteDialog(false);
+
+        setTimeout(() => {
+          navigate("/admin/products");
+        }, 800);
+      })
+      .catch((err) => {
+        showNotification(err || "Failed to delete product", "error");
+      });
   };
 
-  // Loading state
+  /* =========================
+     STATES
+  ========================= */
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -75,14 +99,16 @@ const ProductDetails = () => {
     );
   }
 
-  // Product not found
   if (!product && !loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <FaExclamationTriangle className="w-12 h-12 mx-auto text-gray-400 mb-4" />
           <p className="text-gray-600">Product not found</p>
-          <Link to="/products" className="text-blue-600 mt-4 inline-block">
+          <Link
+            to="/admin/products"
+            className="text-blue-600 mt-4 inline-block"
+          >
             Back to products
           </Link>
         </div>
@@ -90,7 +116,7 @@ const ProductDetails = () => {
     );
   }
 
-  const images = product.images?.length > 0 ? product.images : [""];
+  const images = product?.images?.length ? product.images : [""];
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -118,7 +144,7 @@ const ProductDetails = () => {
           Back to products
         </Link>
 
-        <div className="bg-white rounded-xl shadow-lg p-6 grid grid-cols-1 lg:grid-cols-2 gap-2">
+        <div className="bg-white rounded-xl shadow-lg p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Images */}
           <div>
             <img
@@ -192,9 +218,9 @@ const ProductDetails = () => {
         </div>
       </div>
 
-      {/* Delete Modal */}
+      {/* DELETE MODAL */}
       {openDeleteDialog && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-sm w-full">
             <h3 className="font-bold mb-4">Delete Product</h3>
             <p className="mb-6">
@@ -209,7 +235,8 @@ const ProductDetails = () => {
               </button>
               <button
                 onClick={handleDeleteConfirm}
-                className="px-4 py-2 bg-red-600 text-white rounded"
+                disabled={operationLoading}
+                className="px-4 py-2 bg-red-600 text-white rounded disabled:opacity-60"
               >
                 {operationLoading ? (
                   <FaSpinner className="animate-spin" />
