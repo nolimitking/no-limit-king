@@ -33,9 +33,8 @@ const CartSidebar = ({ isOpen, onClose }) => {
     const productId = getProductId(item);
     if (!productId) return;
 
-    await dispatch(
-      updateCartQuantity({ productId, quantity: newQuantity })
-    ).unwrap();
+    await dispatch(updateCartQuantity({ productId, quantity: newQuantity }))
+      .unwrap;
     dispatch(getCart()); // refetch cart to ensure images populate correctly
   };
 
