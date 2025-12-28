@@ -70,18 +70,19 @@ const Gallery = () => {
             speed={45}
             gradient={false}
             pauseOnHover={true}
+            autoFill
             className="py-4"
           >
             {images.map((img, index) => (
               <div key={index} className="mx-2 md:mx-4 group/item relative">
-                <div className="relative p-8 md:p-12 rounded-2xl bg-gradient-to-br from-gray-900/20 to-gray-900/5 backdrop-blur-sm border border-gray-800/30 hover:border-amber-500/40 transition-all duration-500 hover:shadow-2xl hover:shadow-amber-500/5">
+                <div className="relative p-4 md:p-8 rounded-2xl bg-gradient-to-br from-gray-900/20 to-gray-900/5 backdrop-blur-sm border border-gray-800/30 hover:border-amber-500/40 transition-all duration-500 hover:shadow-2xl hover:shadow-amber-500/5">
                   {/* Subtle glow effect */}
                   <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-amber-500/0 to-amber-500/0 group-hover/item:from-amber-500/3 group-hover/item:to-amber-500/0 transition-all duration-500"></div>
 
                   <img
                     src={img}
                     alt={`Partner ${index + 1}`}
-                    className="relative z-10 h-40 md:h-56 lg:h-64 w-auto object-contain transition-all duration-500 group-hover/item:scale-110"
+                    className="relative z-10 h-50 md:h-70 rounded-lg lg:h-90 w-auto object-contain transition-all duration-500 group-hover/item:scale-110"
                     loading="lazy"
                   />
                 </div>
@@ -105,11 +106,11 @@ const Gallery = () => {
                   key={`second-${index}`}
                   className="mx-2 md:mx-4 group/item relative"
                 >
-                  <div className="relative p-6 md:p-8 rounded-xl bg-gradient-to-br from-gray-900/15 to-gray-900/5 backdrop-blur-sm border border-gray-800/20 hover:border-amber-500/30 transition-all duration-500">
+                  <div className="relative p-3 md:p-4 rounded-xl bg-gradient-to-br from-gray-900/15 to-gray-900/5 backdrop-blur-sm border border-gray-800/20 hover:border-amber-500/30 transition-all duration-500">
                     <img
                       src={img}
                       alt={`Partner ${images.length - index}`}
-                      className="h-32 md:h-40 lg:h-48 w-auto object-contain opacity-90 group-hover/item:opacity-100 transition-all duration-500 group-hover/item:scale-105"
+                      className="h-40 md:h-50 lg:h-70 w-auto rounded-lg object-contain opacity-90 group-hover/item:opacity-100 transition-all duration-500 group-hover/item:scale-105"
                       loading="lazy"
                     />
                   </div>
