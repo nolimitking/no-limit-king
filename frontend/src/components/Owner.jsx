@@ -1,37 +1,31 @@
 import image12 from "../assets/image12.png";
-import { useRef } from "react";
-import { useInView } from "framer-motion";
+import { motion } from "framer-motion";
 
 const Owner = () => {
-  // For animation triggers (install framer-motion for this)
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.3 });
-
   return (
     <section className="relative bg-black py-24 px-6 overflow-hidden">
       {/* Decorative elements */}
       <div className="absolute top-0 left-0 w-64 h-64 bg-amber-500/5 rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl" />
       <div className="absolute bottom-0 right-0 w-80 h-80 bg-amber-500/3 rounded-full translate-x-1/3 translate-y-1/3 blur-3xl" />
 
-      {/* Grid lines overlay */}
+      {/* Grid overlay */}
       <div className="absolute inset-0 bg-grid-white/[0.02] bg-grid" />
 
       <div className="relative max-w-7xl mx-auto w-full">
-        <div
-          ref={ref}
-          className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center"
-        >
-          {/* Image Container - Enhanced with modern framing */}
-          <div
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+          {/* IMAGE */}
+          <motion.div
             className="relative order-2 lg:order-1"
-            style={{
-              transform: isInView ? "none" : "translateX(-100px)",
-              opacity: isInView ? 1 : 0,
-              transition: "all 0.9s cubic-bezier(0.17, 0.55, 0.55, 1) 0.5s",
+            initial={{ opacity: 0, x: -100 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{
+              duration: 0.9,
+              ease: [0.17, 0.55, 0.55, 1],
+              delay: 0.2,
             }}
           >
             <div className="relative group">
-              {/* Main image with gradient overlay */}
               <div className="relative z-10 overflow-hidden rounded-2xl">
                 <img
                   src={image12}
@@ -41,27 +35,29 @@ const Owner = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
               </div>
 
-              {/* Decorative frame elements */}
+              {/* Decorative frames */}
               <div className="absolute -inset-4 border border-amber-500/20 rounded-3xl group-hover:border-amber-500/40 transition-all duration-500" />
               <div className="absolute -inset-2 border border-amber-500/10 rounded-3xl" />
 
-              {/* Floating badge */}
+              {/* Badge */}
               <div className="absolute -bottom-4 -right-4 bg-gradient-to-br from-amber-500 to-amber-600 text-black px-6 py-3 rounded-xl font-bold text-lg shadow-2xl shadow-amber-500/20">
                 FOUNDER
               </div>
             </div>
-          </div>
+          </motion.div>
 
-          {/* Text Content */}
-          <div
+          {/* TEXT */}
+          <motion.div
             className="order-1 lg:order-2"
-            style={{
-              transform: isInView ? "none" : "translateX(100px)",
-              opacity: isInView ? 1 : 0,
-              transition: "all 0.9s cubic-bezier(0.17, 0.55, 0.55, 1)",
+            initial={{ opacity: 0, x: 100 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{
+              duration: 0.9,
+              ease: [0.17, 0.55, 0.55, 1],
             }}
           >
-            {/* Subtle label */}
+            {/* Label */}
             <div className="inline-flex items-center gap-2 mb-8">
               <div className="w-12 h-px bg-gradient-to-r from-amber-500 to-transparent" />
               <span className="text-amber-500/70 text-sm font-semibold tracking-widest uppercase">
@@ -69,7 +65,7 @@ const Owner = () => {
               </span>
             </div>
 
-            {/* Headline */}
+            {/* Title */}
             <h2 className="text-5xl lg:text-6xl font-bold mb-8 tracking-tight">
               <span className="bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 bg-clip-text text-transparent">
                 Billionaire Beard
@@ -77,19 +73,17 @@ const Owner = () => {
             </h2>
 
             {/* Description */}
-            <div className="space-y-6">
-              <p className="text-gray-300 text-lg leading-relaxed font-light">
-                At its core, Billionaire Beard is more than just a brand{" "}
-                <span className="font-semibold text-amber-400">
-                  - it's a mindset.
-                </span>{" "}
-                It's about embracing a lifestyle that is defined by discipline,
-                ambition, and a willingness to challenge the O status quo. Those
-                who embody the Billionaire Beard philosophy are committed to
-                consistently pushing themselves to new heights.
-              </p>
-            </div>
-          </div>
+            <p className="text-gray-300 text-lg leading-relaxed font-light">
+              At its core, Billionaire Beard is more than just a brand{" "}
+              <span className="font-semibold text-amber-400">
+                — it’s a mindset.
+              </span>{" "}
+              It’s about embracing a lifestyle defined by discipline, ambition,
+              and the courage to challenge the status quo. Those who live the
+              Billionaire Beard philosophy are committed to pushing themselves
+              to new heights.
+            </p>
+          </motion.div>
         </div>
       </div>
     </section>
