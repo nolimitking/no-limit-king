@@ -69,7 +69,7 @@ const updateCartQuantity = async (req, res) => {
       cart.totalPrice = calculateTotal(cart.items);
       await cart.save();
 
-      await cart.populate("items.product", "name price image");
+      await cart.populate("items.product", "name price images");
 
       return res.status(200).json(cart);
     } else {

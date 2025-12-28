@@ -29,19 +29,18 @@ const CartSidebar = ({ isOpen, onClose }) => {
     item.product?._id || item.productId || item.product || item._id || null;
 
   // Update item quantity
-  const handleUpdateQuantity = (item, newQuantity) => {
+  const handleUpdateQuantity = async (item, newQuantity) => {
     const productId = getProductId(item);
     if (!productId) return;
 
-    if (newQuantity < 1) {
-      dispatch(updateCartQuantity({ productId, quantity: 0 }));
-    } else {
-      dispatch(updateCartQuantity({ productId, quantity: newQuantity }));
-    }
+    await dispatch(
+      updateCartQuantity({ productId, quantity: newQuantity })
+    ).unwrap();
+    dispatch(getCart()); // refetch cart to ensure images populate correctly
   };
 
   // Product image, name, price helpers
-  const getProductImage = (item) => item.product?.images?.[0] || null;
+  const getProductImage = (item) => item?.product?.images?.[0] || null;
   const getProductName = (item) => item.name || item.product?.name || "Product";
   const getProductPrice = (item) => item.price || item.product?.price || 0;
 
