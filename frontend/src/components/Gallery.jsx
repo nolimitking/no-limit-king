@@ -106,7 +106,7 @@ const Gallery = () => {
                   key={`second-${index}`}
                   className="mx-2 md:mx-4 group/item relative"
                 >
-                  <div className="relative p-3 md:p-4 rounded-xl bg-gradient-to-br from-gray-900/15 to-gray-900/5 backdrop-blur-sm border border-gray-800/20 hover:border-amber-500/30 transition-all duration-500">
+                  <div className="relative p-3 md:p-6 rounded-xl bg-gradient-to-br from-gray-900/15 to-gray-900/5 backdrop-blur-sm border border-gray-800/20 hover:border-amber-500/30 transition-all duration-500">
                     <img
                       src={img}
                       alt={`Partner ${images.length - index}`}
