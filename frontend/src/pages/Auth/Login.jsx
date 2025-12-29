@@ -42,7 +42,6 @@ const Login = () => {
         if (guestId) {
           // 🔥 WAIT for merge to finish
           await dispatch(mergeCart()).unwrap();
-          toast.info("Your cart has been merged with your account");
         }
 
         // 🔥 ALWAYS fetch updated cart
