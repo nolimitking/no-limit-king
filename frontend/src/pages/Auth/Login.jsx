@@ -55,7 +55,7 @@ const Login = () => {
           }
 
           // Navigate to dashboard after cart operations
-          navigate("/user/orders");
+          navigate("/checkout");
         } catch (err) {
           console.error("Cart merge error:", err);
           // Still navigate to dashboard even if cart merge fails
