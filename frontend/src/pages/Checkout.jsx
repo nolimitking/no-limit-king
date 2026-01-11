@@ -5,9 +5,11 @@ import {
   createCheckoutSession,
   clearPaymentState,
 } from "../redux/slices/paymentSlice";
+import { useNavigate } from "react-router-dom";
 
 const Checkout = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const {
     items,
@@ -55,7 +57,7 @@ const Checkout = () => {
         {items.length === 0 ? (
           <div className="text-center py-12">
             <div className="text-gray-500 mb-4">Your cart is empty</div>
-            <button className="text-amber-500 hover:text-amber-400 transition">
+            <button onClick={() => navigate("/")} className="text-amber-500 hover:text-amber-400 transition">
               Return to shop →
             </button>
           </div>
